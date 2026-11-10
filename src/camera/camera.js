@@ -8,8 +8,8 @@ export class Camera {
     this.manual = false;
   }
 
-  follow(target, delta) {
-    if (!this.manual) {
+  follow(target, delta, enabled = true) {
+    if (enabled && !this.manual) {
       this.targetX = target.x;
       this.targetY = target.y;
     }
