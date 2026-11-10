@@ -1,31 +1,13 @@
-/** Shared simulation clock. All gameplay systems consume scaled simulation delta. */
+/** Simulation pause and time scale are independent controls. */
 export class GameClock {
   constructor() {
     this.paused = false;
     this.speed = 1;
-    this.lastSpeed = 1;
   }
-
-  setPaused(paused) {
-    this.paused = Boolean(paused);
-    if (!this.paused && this.speed === 0) this.speed = this.lastSpeed;
-  }
-
-  togglePause() {
-    this.setPaused(!this.paused);
-    return this.paused;
-  }
-
+  setPaused(paused) { this.paused = Boolean(paused); }
+  togglePause() { this.paused = !this.paused; return this.paused; }
   setSpeed(speed) {
-    const nextSpeed = Math.max(0, Math.min(3, Number(speed) || 0));
-    if (nextSpeed === 0) {
-      if (this.speed > 0) this.lastSpeed = this.speed;
-      this.speed = 0;
-      this.paused = true;
-      return;
-    }
-    this.speed = nextSpeed;
-    this.lastSpeed = nextSpeed;
-    this.paused = false;
+    const nextSpeed = Number(speed);
+    if (Number.isFinite(nextSpeed) && nextSpeed > 0) this.speed = Math.max(0.25, Math.min(3, nextSpeed));
   }
 }
