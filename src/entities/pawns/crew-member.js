@@ -12,7 +12,7 @@ export function createCrewMember({ id, name, x, y, color = "#e6b95f" }) {
     isMoving: false,
     drafted: false,
     health: 100,
-    maxHealth: 100,
+    maxHealth: 100,\n    stamina: 100,\n    maxStamina: 100,\n    carryCapacity: 30,\n    carriedWeight: 0,\n    weapon: null,
     commandOrder: "hold",
     commandRevision: 0,
     attackTimer: 0,
