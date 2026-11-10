@@ -251,13 +251,11 @@ export class InputController {
   }
 
   syncSpeedUI() {
-    document.querySelector("#speed-label").textContent = this.clock.paused ? "Ⅱ" : `${this.clock.speed}×`;
+    document.querySelector("#speed-label").textContent = `${this.clock.speed}×`;
     document.querySelectorAll("[data-speed]").forEach((button) => {
       button.classList.toggle("active", Number(button.dataset.speed) === (Number(button.dataset.speed) === 0 ? 0 : this.clock.speed));
     });
-    document.querySelector("#speed-label").textContent = `${this.clock.speed}×`;
     document.querySelector("#pause-button").classList.toggle("paused", this.clock.paused);
-    });
   }
 
   syncCommandBar() {
