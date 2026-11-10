@@ -85,6 +85,7 @@
               <nav class="personnel-tabs" aria-label="Personnel sections">
                 <button type="button" class="personnel-tab active" data-personnel-tab="bio" aria-selected="true">BIO</button>
                 <button type="button" class="personnel-tab" data-personnel-tab="gear" aria-selected="false">BODY &amp; GEAR</button>
+                <button type="button" class="personnel-tab" data-personnel-tab="professions" aria-selected="false">PROFESSIONS</button>
               </nav>
               <button class="modal-close" data-close-modal aria-label="Close personnel record">×</button>
             </header>
@@ -151,6 +152,12 @@
                   </div>
                 </section>
               </div>
+            </section>
+            <section class="personnel-tab-content professions-tab-content" data-personnel-content="professions" hidden>
+              <div class="personnel-section-heading"><span>03 / PROFESSIONS</span><small>SKILLS · MASTERY · WORK CAPACITY</small></div>
+              <div class="profession-summary"><span>ALL PROFESSIONS AVAILABLE</span><strong>BASELINE TRAINING · 1 AP EACH</strong></div>
+              <div id="profession-list" class="profession-list" aria-live="polite"></div>
+              <p class="profession-footnote">Profession level increases efficiency. Mastery stars determine available AP and the XP required for each next level. Every Pawn can perform every profession.</p>
             </section>
             <footer class="personnel-footer"><span><i class="status-dot"></i> PERSONNEL RECORD / CASSANDRA</span><span id="personnel-view-label">PROFILE VIEW · BIO</span></footer>
           </div>
