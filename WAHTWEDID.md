@@ -4,6 +4,30 @@ Stručný vývojový deník CASSANDRA-NEW. Zachycuje nejen změny v kódu, ale t
 
 ## Záznamy
 
+### 2026-11-10 — Pawn Core: struktura a základní anatomie
+- **Implementační commity:**
+  - [8a252e6 — identity](https://github.com/Veyn44/CASSANDRA-NEW/commit/8a252e6722beb37012d1054b92efd05737265dff)
+  - [5d9e59f — physical](https://github.com/Veyn44/CASSANDRA-NEW/commit/5d9e59f16373fab0e69aa9d8198b54206c8337c0)
+  - [a7fe92e — professions](https://github.com/Veyn44/CASSANDRA-NEW/commit/a7fe92ee33bc3cb0d33c4279f142305be454b9d8)
+  - [a4dadfc — progression](https://github.com/Veyn44/CASSANDRA-NEW/commit/a4dadfc6da5966076974b0014bf0b7f7db6a8f89)
+  - [1cc9a9e — vitals](https://github.com/Veyn44/CASSANDRA-NEW/commit/1cc9a9ed6c0c91a6b3de792c4881f8e17bfd8217)
+  - [800ee66 — equipment](https://github.com/Veyn44/CASSANDRA-NEW/commit/800ee668fefe25aae446a067970a095195626c80)
+  - [1c834b6 — inventory](https://github.com/Veyn44/CASSANDRA-NEW/commit/1c834b6c0569c26035ece817334eb07a9bd18ebf)
+  - [5fdcee8 — needs](https://github.com/Veyn44/CASSANDRA-NEW/commit/5fdcee8e3ebc1d62ea0bb0bdea4bfbb449ce8481)
+  - [8565c6c — conditions](https://github.com/Veyn44/CASSANDRA-NEW/commit/8565c6c2ec61b3932cacb2bb709a83e422b3726b)
+  - [4c0ac27 — behavior](https://github.com/Veyn44/CASSANDRA-NEW/commit/4c0ac276aa7cd0724f5ccac409a67bb25dbd8499)
+  - [2f0b16a — pawn-factory](https://github.com/Veyn44/CASSANDRA-NEW/commit/2f0b16aeb44cdc5b739ef8ba911a8e1c9bc210a6)
+  - [c4d624c — pawn body part HP](https://github.com/Veyn44/CASSANDRA-NEW/commit/c4d624c671c95a4535ffbeb39dddc69710461052)
+- **Kód:** připravena modulární adresářová struktura Pawn Core; přidán datový základ šesti částí těla a jejich HP.
+- **Ideologie / herní pravidla:**
+  - Pawn je složený z oddělených oblastí odpovědnosti (identita, fyzické tělo, profese, postup, vitals, výbava, inventář, potřeby, stavy, chování a factory). Systémy se mají rozvíjet samostatně, ne hromadit v jednom souboru.
+  - Anatomie má přesně šest částí: Head, Torso, Left Arm, Right Arm, Left Leg, Right Leg. Zatím se části dále nedělí.
+  - Každá část má vlastní HP. Základní hodnoty: Head 30, Torso 40, každá ruka a noha 20; celkem 150 HP.
+  - Každá část má také `bodyType` a `status`. Konkrétní enumerace a efekty zůstávají otevřené; zatím nezavádíme typy poškození ani detailnější anatomii.
+  - Human je první implementovaný typ; budoucí Robot/Cyborg a změny těla mají být řešitelné rozšířením modelu.
+  - Oblek je oddělená výbava s vlastními částmi a HP, nikoli další část těla pawna.
+- **Hranice implementace:** adresáře jsou v této fázi pouze připravená struktura; většina zatím obsahuje jen `.gitkeep`. Nová anatomie není integrována do starého health/combat systému pawna. Profese, věk, levelování a jejich přesné efekty se budou dopracovávat samostatně.
+
 ### 2026-11-10 — Expedition Suit foundation
 - **Implementační commit:** [64e134c64f0566f3ac584d587b625da32cb5f497](https://github.com/Veyn44/CASSANDRA-NEW/commit/64e134c64f0566f3ac584d587b625da32cb5f497)
 - **Kód:** samostatný datový model Expedition Suit, šest částí s HP a sloty pro moduly, factory, datový model Expedition Suit Station a operace pro přiřazení, uložení, vyzvednutí a odložení/záchranu obleku.
