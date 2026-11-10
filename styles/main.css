@@ -90,3 +90,15 @@
 /* Keep the left rail clean; retain scrolling on compact screens without a visible scrollbar. */
 .left-rail{scrollbar-width:none;-ms-overflow-style:none}
 .left-rail::-webkit-scrollbar{display:none}
+
+
+.dev-tools-panel{margin-top:16px;padding:12px;background:#101b25;border:1px solid #42646b}
+.dev-tools-panel[hidden]{display:none}
+.dev-tools-panel label,.dev-tools-panel>small{display:block;font-size:8px;letter-spacing:.7px;color:var(--muted)}
+.dev-day-row{display:flex;gap:6px;margin:7px 0}
+.dev-day-row input{min-width:0;width:90px;padding:8px;background:#09121a;border:1px solid #344653;color:var(--text);font:10px 'IBM Plex Mono',monospace}
+.dev-day-row button,.end-day-button{padding:8px 10px;background:#142b32;border:1px solid #477b80;color:var(--cyan);font:600 9px 'IBM Plex Mono',monospace;cursor:pointer}
+.end-day-button{width:100%;margin:3px 0 9px;background:#26301f;border-color:#74613d;color:#e5c58d}
+.dev-tools-panel>small{line-height:1.6;letter-spacing:0}
+#dev-mode-toggle[aria-pressed="true"]{border-color:#d5a96b;color:#e5c58d;background:#302719}
+@media(max-width:600px){.world-readout #calendar-readout{display:none}}
