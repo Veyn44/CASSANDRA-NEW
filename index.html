@@ -124,20 +124,32 @@
             </div>
             </section>
             <section class="personnel-tab-content gear-tab-content" data-personnel-content="gear" hidden>
-              <div class="personnel-section-heading"><span>01 / GEAR</span><small>ASSIGNED EQUIPMENT</small></div>
-              <div class="gear-overview-grid">
-                <article class="gear-overview-card">
-                  <div class="gear-card-icon">⌁</div>
-                  <div><span>PRIMARY WEAPON</span><strong id="gear-weapon">UNARMED</strong><small>Current weapon assignment</small></div>
-                </article>
-                <article class="gear-overview-card">
-                  <div class="gear-card-icon">⬡</div>
-                  <div><span>EXPEDITION SUIT</span><strong id="gear-suit">NOT EQUIPPED</strong><small id="gear-suit-detail">No suit assigned to this unit</small></div>
-                </article>
+              <div class="personnel-section-heading"><span>01 / BODY &amp; GEAR</span><small>ANATOMY · PROTECTION · EQUIPMENT</small></div>
+              <div class="body-suit-columns">
+                <section class="loadout-column body-column">
+                  <header><div><strong>BODY</strong><small>ANATOMICAL INTEGRITY</small></div><b id="body-total-hp">150 / 150 HP</b></header>
+                  <div class="part-list"><article class="anatomy-part"><div class="part-label"><strong>HEAD</strong><b id="body-hp-head">30 / 30 HP</b></div><div class="part-hp-track"><i id="body-bar-head" style="width:100%"></i></div><small id="body-status-head">NORMAL</small></article><article class="anatomy-part"><div class="part-label"><strong>TORSO</strong><b id="body-hp-torso">40 / 40 HP</b></div><div class="part-hp-track"><i id="body-bar-torso" style="width:100%"></i></div><small id="body-status-torso">NORMAL</small></article><article class="anatomy-part"><div class="part-label"><strong>LEFT ARM</strong><b id="body-hp-leftArm">20 / 20 HP</b></div><div class="part-hp-track"><i id="body-bar-leftArm" style="width:100%"></i></div><small id="body-status-leftArm">NORMAL</small></article><article class="anatomy-part"><div class="part-label"><strong>RIGHT ARM</strong><b id="body-hp-rightArm">20 / 20 HP</b></div><div class="part-hp-track"><i id="body-bar-rightArm" style="width:100%"></i></div><small id="body-status-rightArm">NORMAL</small></article><article class="anatomy-part"><div class="part-label"><strong>LEFT LEG</strong><b id="body-hp-leftLeg">20 / 20 HP</b></div><div class="part-hp-track"><i id="body-bar-leftLeg" style="width:100%"></i></div><small id="body-status-leftLeg">NORMAL</small></article><article class="anatomy-part"><div class="part-label"><strong>RIGHT LEG</strong><b id="body-hp-rightLeg">20 / 20 HP</b></div><div class="part-hp-track"><i id="body-bar-rightLeg" style="width:100%"></i></div><small id="body-status-rightLeg">NORMAL</small></article></div>
+                </section>
+                <section class="loadout-column suit-column">
+                  <header><div><strong>EXPEDITION SUIT</strong><small id="gear-suit-detail">PROTECTIVE LAYER · 50% BASE HP</small></div><b id="gear-suit">EQUIPPED · 75 HP</b></header>
+                  <div class="part-list"><article class="suit-part" id="suit-part-head"><div class="part-label"><strong>HEAD</strong><b id="suit-hp-head">15 / 15 HP</b></div><div class="part-hp-track suit-track"><i id="suit-bar-head" style="width:100%"></i></div><div class="suit-part-bottom"><small id="suit-status-head">SUIT INTEGRITY</small><span class="module-socket" id="suit-socket-head" title="One module socket">◇ <small>SOCKET</small></span></div></article><article class="suit-part" id="suit-part-torso"><div class="part-label"><strong>TORSO</strong><b id="suit-hp-torso">20 / 20 HP</b></div><div class="part-hp-track suit-track"><i id="suit-bar-torso" style="width:100%"></i></div><div class="suit-part-bottom"><small id="suit-status-torso">SUIT INTEGRITY</small><span class="module-socket" id="suit-socket-torso" title="One module socket">◇ <small>SOCKET</small></span></div></article><article class="suit-part" id="suit-part-leftArm"><div class="part-label"><strong>LEFT ARM</strong><b id="suit-hp-leftArm">10 / 10 HP</b></div><div class="part-hp-track suit-track"><i id="suit-bar-leftArm" style="width:100%"></i></div><div class="suit-part-bottom"><small id="suit-status-leftArm">SUIT INTEGRITY</small><span class="module-socket" id="suit-socket-leftArm" title="One module socket">◇ <small>SOCKET</small></span></div></article><article class="suit-part" id="suit-part-rightArm"><div class="part-label"><strong>RIGHT ARM</strong><b id="suit-hp-rightArm">10 / 10 HP</b></div><div class="part-hp-track suit-track"><i id="suit-bar-rightArm" style="width:100%"></i></div><div class="suit-part-bottom"><small id="suit-status-rightArm">SUIT INTEGRITY</small><span class="module-socket" id="suit-socket-rightArm" title="One module socket">◇ <small>SOCKET</small></span></div></article><article class="suit-part" id="suit-part-leftLeg"><div class="part-label"><strong>LEFT LEG</strong><b id="suit-hp-leftLeg">10 / 10 HP</b></div><div class="part-hp-track suit-track"><i id="suit-bar-leftLeg" style="width:100%"></i></div><div class="suit-part-bottom"><small id="suit-status-leftLeg">SUIT INTEGRITY</small><span class="module-socket" id="suit-socket-leftLeg" title="One module socket">◇ <small>SOCKET</small></span></div></article><article class="suit-part" id="suit-part-rightLeg"><div class="part-label"><strong>RIGHT LEG</strong><b id="suit-hp-rightLeg">10 / 10 HP</b></div><div class="part-hp-track suit-track"><i id="suit-bar-rightLeg" style="width:100%"></i></div><div class="suit-part-bottom"><small id="suit-status-rightLeg">SUIT INTEGRITY</small><span class="module-socket" id="suit-socket-rightLeg" title="One module socket">◇ <small>SOCKET</small></span></div></article></div>
+                </section>
               </div>
-              <div class="gear-placeholder">
-                <span class="bio-placeholder-mark">＋</span>
-                <div><strong>GEAR MANAGEMENT NOT YET AVAILABLE</strong><p>This section is a preview of the equipment record. Suit components, module slots, inventory and equipment interaction will be connected when their systems and interfaces are ready.</p></div>
+              <div class="weapon-loadout">
+                <article class="loadout-slot"><div class="loadout-slot-heading"><span>PRIMARY WEAPON</span><small>MAIN HAND</small></div><strong id="gear-weapon">UNARMED</strong><small class="slot-hint">Weapon slot</small></article>
+                <article class="loadout-slot"><div class="loadout-slot-heading"><span>SECONDARY WEAPON</span><small>OFF HAND</small></div><strong id="gear-secondary-weapon">EMPTY</strong><small class="slot-hint">Weapon slot</small></article>
+              </div>
+              <div class="personal-loadout">
+                <article class="utility-loadout">
+                  <div class="loadout-slot-heading"><span>Q · UTILITY</span><small>QUICK ACCESS</small></div>
+                  <div class="empty-item-slot"><b>＋</b><small id="utility-item-name">EMPTY</small></div>
+                </article>
+                <section class="personal-items-loadout">
+                  <div class="loadout-slot-heading"><span>PERSONAL ITEMS</span><small>CONSUMABLES · SUPPLIES</small></div>
+                  <div class="personal-item-grid">
+                    <article class="personal-item-slot"><b>＋</b><small>SLOT 01</small><strong id="personal-item-1">EMPTY</strong></article><article class="personal-item-slot"><b>＋</b><small>SLOT 02</small><strong id="personal-item-2">EMPTY</strong></article><article class="personal-item-slot"><b>＋</b><small>SLOT 03</small><strong id="personal-item-3">EMPTY</strong></article><article class="personal-item-slot"><b>＋</b><small>SLOT 04</small><strong id="personal-item-4">EMPTY</strong></article><article class="personal-item-slot"><b>＋</b><small>SLOT 05</small><strong id="personal-item-5">EMPTY</strong></article><article class="personal-item-slot"><b>＋</b><small>SLOT 06</small><strong id="personal-item-6">EMPTY</strong></article>
+                  </div>
+                </section>
               </div>
             </section>
             <footer class="personnel-footer"><span><i class="status-dot"></i> PERSONNEL RECORD / CASSANDRA</span><span id="personnel-view-label">PROFILE VIEW · BIO</span></footer>
