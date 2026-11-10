@@ -8,6 +8,7 @@ export class InputController {
     this.keys = new Set();
     this.dragging = false;
     this.lastPointer = null;
+    this.cameraReturnTimeout = null;
 
     this.onKeyDown = (event) => this.handleKeyDown(event);
     this.onKeyUp = (event) => this.keys.delete(event.key.toLowerCase());
@@ -36,11 +37,13 @@ export class InputController {
         this.renderer.tileSize
       );
       this.lastPointer = { x: event.clientX, y: event.clientY };
+      this.scheduleCameraReturn();
     };
     this.onPointerUp = (event) => {
       if (event.button === 1) {
         this.dragging = false;
         this.lastPointer = null;
+        this.scheduleCameraReturn();
       }
     };
 
@@ -92,6 +95,7 @@ export class InputController {
     this.keys.delete("s");
     this.keys.delete("d");
 
+    window.clearTimeout(this.cameraReturnTimeout);
     if (this.commander.drafted) {
       this.camera.centerOn(this.commander);
     } else {
@@ -99,6 +103,14 @@ export class InputController {
       this.camera.manual = true;
     }
     this.syncDraftUI();
+  }
+
+  scheduleCameraReturn() {
+    window.clearTimeout(this.cameraReturnTimeout);
+    if (!this.commander.drafted) return;
+    this.cameraReturnTimeout = window.setTimeout(() => {
+      if (this.commander.drafted) this.camera.centerOn(this.commander);
+    }, 1800);
   }
 
   updateAim(event) {
@@ -169,5 +181,6 @@ export class InputController {
     window.removeEventListener("pointermove", this.onPointerMove);
     window.removeEventListener("pointerup", this.onPointerUp);
     window.clearTimeout(this.toastTimeout);
+    window.clearTimeout(this.cameraReturnTimeout);
   }
 }
