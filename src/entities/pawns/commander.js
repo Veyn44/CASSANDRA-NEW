@@ -1,9 +1,10 @@
 import { moveEntity } from "../../navigation/movement.js";
+import { createPawnIdentity } from "./identity/identity.js";
 
-export function createCommander({ x, y }) {
+export function createCommander({ x, y, age, birthdayDay }) {
   return {
     id: "commander",
-    name: "Commander",
+    ...createPawnIdentity({ name: "Commander", age, birthdayDay }),
     x, y,
     radius: 0.28,
     speed: 4.2,
