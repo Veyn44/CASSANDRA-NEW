@@ -1,6 +1,7 @@
 import { moveEntity } from "../../navigation/movement.js";
 import { createPawnIdentity } from "./identity/identity.js";
 import { createBodyParts, PAWN_BASE_MAX_HP } from "./physical/body-parts.js";
+import { createProfessionProgression } from "./professions/progression.js";
 
 export function createCrewMember({ id, name, x, y, color = "#e6b95f", age, birthdayDay }) {
   return {
@@ -8,6 +9,7 @@ export function createCrewMember({ id, name, x, y, color = "#e6b95f", age, birth
     ...createPawnIdentity({ name, age, birthdayDay }),
     x, y,
     bodyParts: createBodyParts(),
+    professions: createProfessionProgression(),
     secondaryWeapon: null,
     utilityItem: null,
     personalItems: Array.from({ length: 6 }, (_, index) => ({ slot: index + 1, item: null })),
