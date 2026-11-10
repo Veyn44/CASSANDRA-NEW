@@ -24,7 +24,7 @@ export class Renderer {
     this.context.setTransform(ratio, 0, 0, ratio, 0, 0);
   }
 
-  render(elapsed = 0) {
+  render(elapsed = 0, paused = false) {
     const ctx = this.context;
     const width = this.width;
     const height = this.height;
@@ -41,7 +41,7 @@ export class Renderer {
     this.drawGrid(ctx, left, top, right, bottom, tile, width, height);
     this.drawModules(ctx, left, top, tile);
     for (const pawn of this.pawns) this.drawPawn(ctx, left, top, tile, elapsed, pawn);
-    this.drawAmbientDetails(ctx, left, top, right, bottom, tile, elapsed);
+    this.drawAmbientDetails(ctx, left, top, right, bottom, tile, elapsed);\n    if (paused) this.drawPauseFrame(ctx, elapsed);
   }
 
   drawTerrain(ctx, left, top, right, bottom, tile) {
@@ -158,6 +158,18 @@ export class Renderer {
       ctx.stroke();
     }
     ctx.restore();
+  }
+
+  drawPauseFrame(ctx, elapsed) {
+    const pulse = 0.42 + (Math.sin(elapsed * 3.2) + 1) * 0.16;
+    const inset = 3;
+    this.context.save();
+    this.context.strokeStyle = `rgba(230,185,95,${pulse})`;
+    this.context.shadowColor = "#e6b95f";
+    this.context.shadowBlur = 9 + Math.sin(elapsed * 3.2) * 3;
+    this.context.lineWidth = 3;
+    this.context.strokeRect(inset, inset, this.width - inset * 2, this.height - inset * 2);
+    this.context.restore();
   }
 
   drawAmbientDetails(ctx, left, top, right, bottom, tile, elapsed) {
