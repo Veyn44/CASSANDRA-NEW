@@ -35,7 +35,7 @@ export function createGame({ canvas }) {
       for (const pawn of crew) pawn.update(delta, world, crew);
     }
     camera.follow(commander, delta, commander.drafted && !camera.manual);
-    renderer.render(elapsed, clock.paused);
+    renderer.render(elapsed, clock.paused, timestamp / 1000);
 
     document.querySelector("#clock-readout").textContent = formatClock(elapsed);
     document.querySelector("#coords-readout").textContent =
