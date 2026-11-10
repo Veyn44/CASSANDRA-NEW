@@ -23,14 +23,11 @@ export class InputController {
     };
     this.onPointerMove = (event) => {
       if (!this.dragging || !this.lastPointer) return;
-      const rect = this.canvas.getBoundingClientRect();
-      const scale = this.renderer.tileSize * this.camera.zoom;
-      this.camera.targetX -= (event.clientX - this.lastPointer.x) / scale;
-      this.camera.targetY -= (event.clientY - this.lastPointer.y) / scale;
-      this.camera.x = this.camera.targetX;
-      this.camera.y = this.camera.targetY;
-      this.camera.panX = 0;
-      this.camera.panY = 0;
+      this.camera.panByScreenDelta(
+        event.clientX - this.lastPointer.x,
+        event.clientY - this.lastPointer.y,
+        this.renderer.tileSize
+      );
       this.lastPointer = { x: event.clientX, y: event.clientY };
     };
     this.onPointerUp = (event) => {
@@ -66,7 +63,11 @@ export class InputController {
     const key = event.key.toLowerCase();
     if (["w", "a", "s", "d", " "].includes(key)) event.preventDefault();
     if (key === " " && !event.repeat) this.togglePause();
-    if (key === "escape") this.clock.setPaused(true);
+    if (key === "escape") {
+      this.clock.setPaused(true);
+      this.syncPauseUI();
+      this.syncSpeedUI();
+    }
     this.keys.add(key);
   }
 
@@ -75,7 +76,6 @@ export class InputController {
     const y = Number(this.keys.has("s")) - Number(this.keys.has("w"));
     this.commander.velocityX = x;
     this.commander.velocityY = y;
-    if (x || y) this.camera.panX = this.camera.panY = 0;
   }
 
   togglePause() {
