@@ -20,7 +20,7 @@
     </header>
     <section class="game-layout">
       <aside class="left-rail">
-        <div class="rail-heading"><span>COMMAND</span><span class="live-label">LIVE</span></div>
+        <div class="rail-heading"><span>COMMAND</span><span id="game-status" class="live-label">LIVE</span></div>
         <article class="commander-card">
           <div class="portrait"><span>V</span><i></i></div>
           <div class="commander-info"><strong>COMMANDER</strong><small>Human · Level 01</small><div class="health-track"><span></span></div></div>
@@ -44,9 +44,9 @@
       </aside>
       <section class="viewport">
         <canvas id="game-canvas" aria-label="Top-down asteroid outpost game view"></canvas>
-        <div class="viewport-top"><div class="scene-tag"><span class="scene-icon">⌖</span><div><strong>MINING OUTPOST</strong><small>ASTEROID SURFACE · Z0</small></div></div><div class="viewport-tools"><button id="grid-button" class="tool-button active">GRID <span>ON</span></button><button id="center-button" class="tool-button">CENTER <span>⌖</span></button></div></div>
+        <div class="viewport-top"><div id="crew-command-bar" class="crew-command-bar"><article class="crew-card" data-pawn-id="commander"><div class="crew-identity"><span class="crew-avatar cyan">C</span><span><strong>COMMANDER</strong><small class="crew-order">HOLD</small></span></div><div class="crew-orders"><button data-pawn-id="commander" data-order="hold" title="Hold position">HOLD</button><button data-pawn-id="commander" data-order="follow" title="Follow">FOLLOW</button><button data-pawn-id="commander" data-order="move" title="Move">MOVE</button><button data-pawn-id="commander" data-order="guard" title="Guard">GUARD</button><button data-pawn-id="commander" data-order="attack" title="Attack">ATTACK</button><button data-pawn-id="commander" data-order="use" title="Use">USE</button><button data-pawn-id="commander" data-order="retreat" title="Retreat">RETREAT</button><button data-pawn-id="commander" data-order="assist" title="Assist">ASSIST</button></div></article><article class="crew-card" data-pawn-id="crew-02"><div class="crew-identity"><span class="crew-avatar yellow">M</span><span><strong>MIRA</strong><small class="crew-order">HOLD</small></span></div><div class="crew-orders"><button data-pawn-id="crew-02" data-order="hold" title="Hold position">HOLD</button><button data-pawn-id="crew-02" data-order="follow" title="Follow">FOLLOW</button><button data-pawn-id="crew-02" data-order="move" title="Move">MOVE</button><button data-pawn-id="crew-02" data-order="guard" title="Guard">GUARD</button><button data-pawn-id="crew-02" data-order="attack" title="Attack">ATTACK</button><button data-pawn-id="crew-02" data-order="use" title="Use">USE</button><button data-pawn-id="crew-02" data-order="retreat" title="Retreat">RETREAT</button><button data-pawn-id="crew-02" data-order="assist" title="Assist">ASSIST</button></div></article></div><div class="viewport-tools"><button id="grid-button" class="tool-button active">GRID <span>ON</span></button><button id="center-button" class="tool-button">CENTER <span>⌖</span></button></div></div>
         <div class="viewport-bottom"><span><i class="legend-dot commander-dot"></i> COMMANDER</span><span><i class="legend-dot base-dot"></i> OUTPOST MODULE</span><span id="camera-readout">ZOOM 100%</span></div>
-        <div id="pause-overlay" class="pause-overlay" hidden><div><span class="pause-symbol">Ⅱ</span><strong>SIMULATION PAUSED</strong><small>Press SPACE to resume</small></div></div>
+        
         <div id="toast" class="toast" role="status" aria-live="polite"></div>
       </section>
       <aside class="right-rail">
