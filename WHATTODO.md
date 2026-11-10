@@ -259,3 +259,102 @@ Při návrhu každého nového systému ověřit:
 8. Respektuje systém možnost, že základna během expedice pouze ambientně žije, aniž by postupoval strategický čas?
 
 Pokud nový návrh některý princip poruší, není automaticky zakázaný, ale konflikt musí být výslovně pojmenován a společně rozhodnut. Tento dokument má sloužit jako společná paměť návrhové ideologie napříč chaty i při budoucím návratu k jednotlivým systémům.
+
+
+### 1.9 Aktualizace profesního modelu — novější návrh přebíjí starší body výše
+
+Následující upřesnění nahrazují všechny rozporné starší návrhy v sekcích 1.2–1.4 a 1.8. Jde o aktuální návrhový směr, nikoliv ještě kompletní implementační specifikaci.
+
+#### Počáteční mastery a náhodné generování
+
+- Pawn začíná s jednou až třemi náhodně vybranými profesemi, podle rarity:
+  - 1 profese: 95 % (Common).
+  - 2 profese: 4,5 % (Rare).
+  - 3 profese: 0,5 % (Very Rare).
+- Každá počáteční specializace přidá **3 mastery hvězdičky** do náhodně vybrané profese.
+- Pawn s jednou počáteční specializací má celkem 3 hvězdičky; se dvěma má 6; se třemi má 9.
+- Mastery může postupně dosáhnout maximálně 6 hvězdiček v jedné profesi (aktuální pracovní limit).
+- Každá mastery hvězdička přidává 1 AP pro danou profesi.
+- Další mastery se získává náhodně podle postupu Pawna; přesná pravidla přidělování a ochrana proti překročení limitu 6 hvězdiček na profesi se dopracují v profesním systému.
+
+#### Profesní XP, levely a efektivita
+
+- Každá profese má vlastní XP a level 1–30. Pawn začíná na levelu 1 v každé profesi.
+- Pawn získává XP do každé profese, jejíž činnost skutečně vykoná. XP jsou vedlejším důsledkem vykonané práce, nikoliv cílem, kvůli kterému by Pawn měl vybírat činnost.
+- Každý dosažený nový level v libovolné profesi současně zvýší celkový Pawn level o 1. Celkový Pawn level tedy sleduje počet profesních level-upů; není to samostatný XP pool ani průměr/součet aktuálních levelů profesí.
+- Každý profesní level přidává +10 % efficiency pro akce dané profese.
+- Při levelu 30 má profese +300 % efficiency. Při modelu, kdy se základní cena akce dělí hodnotou (1 + efficiency), stojí akce s původní cenou 1 AP pouze 0,25 AP.
+- Efektivita tak umožňuje specialistovi provést více levnějších akcí v rámci jeho profesních AP, případně vykonávat nákladné akce, které jsou pro základního Pawna prakticky nedostupné.
+- Ilustrační příklad: Pawn se dvěma počátečními mastery specializacemi má dohromady 6 mastery hvězdiček, tedy 6 AP rozdělených mezi dvě profese. Při levelu 30 v jedné z těchto profesí může efektivita 300 % snížit cenu běžné akce z 1 AP na 0,25 AP; 6 AP tak odpovídá až 24 takovým akcím. Skutečný počet akcí závisí na ceně konkrétních akcí a dostupné Stamině.
+- Starší návrh +5 AP za specializaci a starší varianta základního AP pro všechny profese nejsou součástí tohoto aktualizovaného modelu. Přesné zacházení s profesí bez mastery, její dostupnost a případné základní AP je stále potřeba výslovně uzavřít.
+
+#### Získávání dalších mastery
+
+- Další mastery se získává automaticky a náhodně podle celkového profesního postupu Pawna; hráč si konkrétní profesi nevybírá.
+- Dřívější pravidlo „každých 10 levelů“ zůstává návrhovým směrem, ale musí být přesně definováno, zda se počítá celkový Pawn level, jak se vybírá cílová profese a jak se postup řeší při dosažení mastery limitu.
+- Mastery není totéž co profesní level: level zvyšuje efficiency, mastery poskytuje AP.
+
+#### Stamina jako náklad pracovních a bojových akcí
+
+- Stamina je fyzický zdroj oddělený od profesních AP.
+- Některé pracovní a bojové akce budou mít vlastní Stamina cost.
+- Příklad: vytěžení jedné tile může stát 10 Stamina.
+- Profesní AP určují pracovní kapacitu podle specializace a efektivity; Stamina omezuje, kolik fyzicky náročné práce Pawn zvládne.
+- Akce proto mohou skončit na limitu AP nebo na limitu Stamina, podle toho, který zdroj dojde dříve.
+- Cena Stamina, regenerace a pravidla vyčerpání se budou definovat pro jednotlivé akce a systémy. Tento bod zatím není implementační specifikací.
+
+---
+
+## 5. Vitality System — návrhový směr / NEEDS DESIGN
+
+Vitality má být společná oblast pro biologický a fyzický stav Pawna. Nejde o jedinou souhrnnou číselnou hodnotu; jde o nadřazené členění několika samostatných subsystémů.
+
+### 5.1 Food
+
+- Pawn má vlastní Food ukazatel.
+- Food se spotřebovává průběžně během lokální simulace, nikoliv jednorázovým odečtem při END DAY.
+- Pawn na základně může automaticky sáhnout do dostupných zásob, když jeho Food klesne pod stanovený práh.
+- Příklad k balancování: při poklesu pod 20 % si Pawn vezme konzervu, která doplní 60 % Food; konzerva se odečte ze skladu.
+- Práh, velikost doplnění, spotřeba, přístup ke skladům a pravidla pro Pawn mimo základnu zůstávají otevřené.
+- Při nedostatku jídla musí vznikat odpovídající Condition; konkrétní stupně a následky se navrhnou později.
+
+### 5.2 Water
+
+- Water má vlastní ukazatel oddělený od Food.
+- Voda se rovněž spotřebovává průběžně a doplňuje se z dostupných zásob podle vlastních pravidel.
+- Mechanika doplňování, spotřeby, zásobování na expedici a Conditions při nedostatku vody zůstává otevřená.
+
+### 5.3 Health a anatomie
+
+- Health zůstává propojené s anatomickými částmi těla; nemá vzniknout druhý nezávislý pool HP.
+- Do anatomie chceme doplnit základní vnitřní orgány.
+- Předběžný seznam orgánů: brain, heart, lungs, liver, stomach a kidneys. Seznam není uzavřený.
+- Orgány budou mít vlastní stav/funkčnost a případně vlastní HP; jejich přesná datová struktura a vztah k HP vnějších částí těla se musí navrhnout.
+- Poškození orgánů má v budoucnu umožnit specifické následky a medicínské zásahy. Nyní se pouze připravuje architektonický prostor; simulace orgánů ani chirurgie se zatím neimplementují.
+
+### 5.4 Stamina
+
+- Stamina zůstává samostatnou součástí Vitality.
+- Bude se spotřebovávat při vybraných pracovních a bojových akcích podle jejich individuální ceny.
+- Příklad: Mining může stát 10 Stamina za vytěženou tile.
+- Profesní AP a Stamina mají odlišné role: AP vyjadřuje profesní pracovní kapacitu, Stamina fyzickou výdrž.
+- Konkrétní ceny, regenerace, nulový stav a návazné Conditions se dopracují později.
+
+### 5.5 Vyčerpání a Conditions
+
+- Při poklesu Vitality na 0 se zvažuje **Catatonic** stav jako projev úplného vyčerpání.
+- Přesná definice hodnoty Vitality, která může klesnout na 0, a její vztah k dílčím ukazatelům Food, Water, Health a Stamina nejsou rozhodnuté.
+- Catatonic zatím není finální Condition ani schválené pravidlo; je to návrh k dalšímu rozpracování.
+- Conditions budou vznikat z konkrétních herních situací a budou se postupně doplňovat. Nyní je potřeba připravit pouze obecnou strukturu Conditions, nikoliv celý katalog stavů.
+- AI Behavior, která bude na Conditions reagovat, se bude řešit později.
+
+### 5.6 Otevřené otázky Vitality
+
+- Zda Vitality bude mít vlastní agregovanou hodnotu, nebo bude pouze kontejnerem pro Food, Water, Health a Stamina.
+- Jak přesně funguje průběžná spotřeba Food a Water, včetně expedice a nedostupnosti zásob.
+- Jak se řeší rozdělování omezených zásob mezi více Pawnů.
+- Jak se vyhodnocuje stav při nulovém Food nebo Water a zda mohou dílčí hodnoty přecházet pod nulu.
+- Jak se definuje Catatonic a zda vychází z jedné hodnoty, kombinace více hodnot, nebo konkrétních Conditions.
+- Jaké akce spotřebovávají Stamina, kolik stojí a jak se regeneruje.
+- Jak budou orgány začleněny do anatomie a jak jejich poškození ovlivňuje Health a Conditions.
+
