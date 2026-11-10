@@ -1,11 +1,16 @@
 import { moveEntity } from "../../navigation/movement.js";
 import { createPawnIdentity } from "./identity/identity.js";
+import { createBodyParts, PAWN_BASE_MAX_HP } from "./physical/body-parts.js";
 
 export function createCommander({ x, y, age, birthdayDay }) {
   return {
     id: "commander",
     ...createPawnIdentity({ name: "Commander", age, birthdayDay }),
     x, y,
+    bodyParts: createBodyParts(),
+    secondaryWeapon: null,
+    utilityItem: null,
+    personalItems: Array.from({ length: 6 }, (_, index) => ({ slot: index + 1, item: null })),
     radius: 0.28,
     speed: 4.2,
     rotation: -Math.PI / 2,
@@ -14,8 +19,8 @@ export function createCommander({ x, y, age, birthdayDay }) {
     velocityY: 0,
     isMoving: false,
     drafted: false,
-    health: 100,
-    maxHealth: 100,
+    health: PAWN_BASE_MAX_HP,
+    maxHealth: PAWN_BASE_MAX_HP,
     stamina: 100,
     maxStamina: 100,
     carryCapacity: 30,
