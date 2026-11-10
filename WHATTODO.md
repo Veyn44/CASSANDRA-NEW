@@ -153,3 +153,109 @@ Tato část zachycuje související směr, který vznikl při debatě o profesí
 Po zaznamenání těchto návrhových poznámek se práce vrací k základům CASSANDRA-NEW.
 
 Profesní systém zatím neimplementovat. Nejdříve znovu projít hlavní herní smyčku, základní stav hry, čas, pohyb pawnů, práci a vztah mezi základnou a expedicí. K profesím se vrátit až ve chvíli, kdy bude jasné, jak zapadají do těchto základních systémů.
+
+
+---
+
+## 4. Čas, pohyb pawnů a režimy hry — společná ideologie
+
+Tato sekce je koncepční vodítko pro další návrhová okna. Popisuje zamýšlené principy, nikoliv hotovou technickou specifikaci. Při návrhu nových systémů je nutné kontrolovat, zda nejsou v rozporu s těmito pravidly nebo zda nevyžadují jejich vědomou změnu.
+
+### 4.1 Dva herní režimy, dva způsoby práce
+
+CASSANDRA má kombinovat strategickou základnovou hru s real-time expedicí:
+
+- **Základna:** strategický denní cyklus. Pracovní činnosti pawnů jsou omezené profesními AP a vyhodnocují se v rámci dne.
+- **Expedice:** real-time top-down akční režim. Hráč přímo prozkoumává prostředí, pohybuje posádkou, bojuje a získává loot. Nepoužívají se zde základnové profesní AP.
+- Původní tahová DNA hry se nezahazuje, ale pohyb pawnů na základně nemá působit jako klasický šachový/tile-by-tile tahový pohyb.
+
+### 4.2 Pohyb pawnů na základně
+
+- Pawni se mají pohybovat plynule a průběžně, vizuálně blíže colony simulacím typu RimWorld než čistě tahové hře.
+- Plynulý pohyb a vizuální animace nejsou totéž co neomezená pracovní simulace.
+- Profesní AP omezují **vykonávání práce**, nikoliv samotnou možnost pohybu.
+- Pohyb, přesuny mezi místnostmi a rekreační animace nesmějí spotřebovávat profesní AP, pokud pro konkrétní herní činnost nebude později výslovně stanoveno jinak.
+- Pawn může po dokončení práce přejít do rekreační oblasti a vizuálně tam vykonávat nepracovní činnosti.
+- Přesná rychlost pohybu, navigace, kolize, pathfinding, rozvrhování a způsob simulace pohybu během strategického dne zůstávají k návrhu.
+
+### 4.3 Pracovní fáze a připravenost dne
+
+- Na začátku pracovního dne mají pawni k dispozici své denní profesní AP.
+- Hráč zadává pracovní příkazy; pawn vykonává práci podle příkazů, dostupných AP, požadavků práce a pravidel AI.
+- Pracovní fáze je dokončena, když každý pawn buď vyčerpal relevantní pracovní kapacitu, dokončil přidělené úkoly, nebo už nemá dostupnou/platnou práci.
+- Pawn, který nemá co dělat, nemá blokovat den jen proto, že mu zůstaly nevyužité AP.
+- Po dokončení pracovních povinností se pawni přesunou do rekreačního režimu.
+- Stav, kdy jsou všichni pawni mimo pracovní režim a v rekreačním/idle režimu, znamená **READY** – základna je připravena na expedici nebo denní přechod.
+- Přesná definice „nemá co dělat“ (žádný příkaz, nedostupný cíl, chybějící surovina, nedostupný nástroj, blokovaná cesta apod.) musí být navržena tak, aby AI nezůstala zaseknutá a hráč rozuměl důvodu.
+
+### 4.4 END TURN
+
+- END TURN je explicitní hráčský synchronizační bod mezi strategickými dny.
+- END TURN není dostupný, dokud pracovní fáze není dokončena a pawni nejsou ve stavu READY.
+- END TURN není dostupný během aktivní expedice.
+- Po potvrzení END TURN proběhne denní vyhodnocení a začne nový strategický den.
+- Denní spotřeba základny (například jídlo a voda) se odečítá při denním vyhodnocení podle počtu pawnů a jejich individuálních modifikátorů.
+- Denní spotřeba nemá být řešena jako nepřetržité food/drink bary, které by během základnového dne neustále tikaly. Základní záměr je dávkové vyhodnocení při přechodu dne.
+- Přesné pořadí denního vyhodnocení, obnovy AP, produkce, spotřeby, stavů pawnů, událostí a dalších systémů není zatím rozhodnuto.
+- END TURN a zahájení expedice jsou dvě různé akce: obě mohou být dostupné ve stavu READY, ale zahájení expedice nesmí samo o sobě posunout strategický den.
+
+### 4.5 Rekreační režim („pawn v akváriu“)
+
+- Po dokončení pracovních úkolů pawn přestane vykonávat placenou/pracovní činnost.
+- V rekreačním režimu může vizuálně cvičit, číst, tančit, společensky interagovat nebo používat rekreační místnosti.
+- Tyto činnosti jsou v první řadě vizuální/ambientní simulace, nikoliv další pracovní úkoly spotřebovávající AP.
+- Během expedice mohou pawni, kteří zůstali na základně, pokračovat v těchto ambientních činnostech i dlouhou dobu reálného času.
+- Délka reálného času expedice sama o sobě neposouvá strategický den základny.
+- Zatím není rozhodnuto, zda a jak budou rekreační činnosti později ovlivňovat morálku, vztahy, regeneraci nebo jiné statistiky. Nesmí se to automaticky předpokládat.
+
+### 4.6 Expedice jako real-time fáze
+
+- Expedice je samostatný real-time herní režim, nikoliv další sada základnových tahů.
+- Hráč ovládá expedující posádku v top-down prostředí; čas v misi běží plynule.
+- Expedice nemá pevný limit délky v reálném čase ani povinný konec po určitém počtu minut.
+- Délku mise omezují zásoby a stav posádky/výbavy, například munice, poškození, dostupné zdroje a schopnost bezpečně pokračovat.
+- Hráč může expedici ukončit a vrátit se na základnu. Není nutné vyčerpat všechny zásoby ani vylootovat celou oblast.
+- Navštívené sektory/oblasti mají uchovávat změny světa a loot, aby se do nich hráč mohl vrátit. Konkrétní persistence (například seed + uložené změny) je samostatné budoucí téma.
+
+### 4.7 Sdílený strategický čas – bez paralelních kalendářů
+
+- Základna a expedice sdílejí jeden strategický kalendář a jeden aktuální den.
+- Během expedice se strategický den základny neposouvá. Základna čeká ve stejném dni, ve kterém byla expedice zahájena.
+- Nelze na základně provést END TURN, zatímco je expedice aktivní.
+- Nejde o dva nezávislé světy, které si každý počítají vlastní dny. Expedice je dočasná real-time fáze uvnitř jednoho společného strategického dne.
+- Během expedice může základna nadále zobrazovat ambientní pohyb a rekreační animace pawnů, ale nesmí tím vznikat druhý strategický čas, další pracovní den ani automatická denní spotřeba.
+- Po návratu se hráč vrátí do základnového režimu stále ve stejném strategickém dni a může provést END TURN.
+- Reálná délka mise (například 20 minut nebo několik hodin) nemá automaticky znamenat stejný posun herního kalendáře.
+
+### 4.8 Zásobování expedice
+
+- Každá expedice dostane při odletu zásobovací balíček odpovídající **jednomu hernímu dni spotřeby celé posádky**.
+- Balíček může zahrnovat kyslík, vodu a jídlo; množství se odvodí od počtu pawnů a jejich individuálních modifikátorů.
+- Hráč musí před odletem vidět, kolik zásob expedice potřebuje a kolik jich shuttle skutečně veze.
+- Při ukončení expedice se celý denní zásobovací balíček odečte, i když posádka část zásob nevyužila.
+- Shuttle se vrací bez zbytků tohoto zásobovacího balíčku. Nevyužité zbytky se nepřevádějí zpět do základnového skladu.
+- Jeden den zásob není pevný 24hodinový časovač mise. Jde o abstraktní nákladový balíček jedné expedice.
+- Munice a další spotřební/technické zdroje mohou mít vlastní průběžnou spotřebu a mohou být důvodem k návratu.
+- Přesná pravidla zásob, jejich typy, kapacita shuttle a chování při ztrátě/poškození shuttle zůstávají otevřená.
+
+### 4.9 Délka letu, vzdálenost a motory
+
+- Vzdálenější sektory mohou vyžadovat lepší nebo rychlejší motory shuttle.
+- Technologie pohonu tak přirozeně rozšiřuje dostupný dosah expedic.
+- Délka letu a způsob jejího zobrazení/řešení musí být sladěny s abstrakcí jednoho zásobovacího balíčku na expedici.
+- Zatím není rozhodnuto, zda let mezi sektory bude přímo hratelný, reprezentovaný přechodem, nebo řešený jinou abstrakcí. Nesmí se předpokládat, že samotný let automaticky spotřebovává další strategické dny.
+
+### 4.10 Návrhové invarianty a kolizní kontrola
+
+Při návrhu každého nového systému ověřit:
+
+1. Nepřidává systém druhý nezávislý strategický kalendář?
+2. Neposouvá systém denní spotřebu nebo END TURN během aktivní expedice?
+3. Nespotřebovává běžný pohyb pawnů profesní AP, které jsou určené pro práci?
+4. Nevyžaduje systém specializovaného pawna pro úplně základní přežití, které má zvládnout i základní pawn?
+5. Nezaměňuje systém profesní AP, XP a efektivitu?
+6. Nepředpokládá systém, že expedice musí trvat přesně jeden herní den? Jeden den zásob je nákladová abstrakce, ne časový limit.
+7. Nevyžaduje systém paralelní simulaci základny a expedice, když záměrem je jeden společný strategický den?
+8. Respektuje systém možnost, že základna během expedice pouze ambientně žije, aniž by postupoval strategický čas?
+
+Pokud nový návrh některý princip poruší, není automaticky zakázaný, ale konflikt musí být výslovně pojmenován a společně rozhodnut. Tento dokument má sloužit jako společná paměť návrhové ideologie napříč chaty i při budoucím návratu k jednotlivým systémům.
