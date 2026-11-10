@@ -45,3 +45,8 @@ Stručný vývojový deník CASSANDRA-NEW. Zachycuje nejen změny v kódu, ale t
 - **Implementační commit:** [90e71d676957afe4f9c9ad53acbc5321e848a2aa](https://github.com/Veyn44/CASSANDRA-NEW/commit/90e71d676957afe4f9c9ad53acbc5321e848a2aa)
 - **Kód:** každá ze šesti částí obleku nyní obsahuje vlastní prázdný slot `module`.
 - **Ideologie:** slot je součástí anatomické části obleku, ne samostatným inventářem stanice nebo pawna. Jeden slot na část; obsah a účinky modulů budou definovány později.
+
+### 2026-11-10 — UI cleanup: left command rail
+- **Implementační commity:** [0db8fc7 — remove control hints](https://github.com/Veyn44/CASSANDRA-NEW/commit/0db8fc7749bb45b647accc24e33c49d6e14c7008), [7479b75 — hide left scrollbar](https://github.com/Veyn44/CASSANDRA-NEW/commit/7479b7578caac1b44eca9d4de12840b0c93fb88a)
+- **Kód:** odstraněna sekce CONTROL s klávesovými nápovědami; karta pawna a DRAFT ON/OFF zůstávají. Scrollbar levého panelu je skrytý.
+- **Ověření:** změny zapsány do GitHubu; runtime/browser test této úpravy zatím neproveden.
