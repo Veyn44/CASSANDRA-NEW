@@ -358,3 +358,42 @@ Vitality má být společná oblast pro biologický a fyzický stav Pawna. Nejde
 - Jaké akce spotřebovávají Stamina, kolik stojí a jak se regeneruje.
 - Jak budou orgány začleněny do anatomie a jak jejich poškození ovlivňuje Health a Conditions.
 
+
+
+### 1.10 Profesní tagy a datová struktura — aktuální rozhodnutí
+
+Tato aktualizace přebíjí rozporné části staršího katalogu v sekcích 1.7–1.9. Jde o schválený základ datového modelu; konkrétní pracovní akce a jejich XP odměny se budou doplňovat samostatně.
+
+#### Profesní katalog
+
+Každý pracovní úkon bude mít právě jeden profesní tag. Pawn může vykonávat základní činnosti všech profesí; profesní úroveň ovlivňuje efektivitu, nikoliv samotnou dostupnost běžné práce.
+
+Aktuální katalog obsahuje devět profesí:
+1. **Mining** — prospecting a jakékoliv získávání surovin.
+2. **Engineering** — infrastruktura, stavba bloků, nábytku, podlah a konstrukcí.
+3. **Material Science** — zpracování surovin a případný vývoj slitin/kompozitů. Samostatný tag je odůvodněný, pokud bude zpracování materiálů rozsáhlým procesem vyžadovaným příslušnými stroji.
+4. **Technician** — diagnostika, opravy, údržba, elektronika a robotika.
+5. **Science** — analýza na místě, laboratorní výzkum, experimenty a zkoumání nových prvků/technologií.
+6. **Fabrication** — výroba předmětů z již zpracovaných materiálů, například modulů, nábojů, zbraní a obleků.
+7. **Soldier** — bojová efektivita, zacházení se zbraněmi, reakce, taktika, čištění zbraní a příprava výstroje po boji.
+8. **Medicine** — diagnostika, ošetřování, léčba, chirurgie a péče o orgány.
+9. **Operator** — přeprava, hauling, manipulace s nákladem a obsluha transportních prostředků/robotických transportérů. Přesný katalog činností zůstává otevřený.
+
+Pilot se jako samostatná profese zatím nepoužije; řízení shuttle má být převážně automatizované/AI. Logistics se nahrazuje univerzálnějším názvem **Operator**. Robotika při opravách zůstává Technician; ovládání/obsluha transportních jednotek spadá pod Operator.
+
+#### Výchozí data každé profese u nového Pawna
+
+- Každý Pawn má od vytvoření záznam pro všech devět profesí.
+- Každá profese začíná na **Level 1**, **XP 0/100** a **base AP 1**.
+- Každá profese má vlastní XP a vlastní Level; XP z činnosti se připisují výhradně tagu daného úkonu.
+- Každých 100 XP zvýší danou profesi o jeden Level. Po level-upu se XP dalšího levelu začínají od 0; přebytečné XP se přenášejí.
+- Maximální Level je 30. Na Levelu 30 už další XP nepřibývají.
+- Každý Level odpovídá +10 % efficiency; Level 1 tedy začíná na 10 % a Level 30 dosahuje +300 %. Přesné napojení efficiency na cenu jednotlivých akcí se řeší v pracovním systému.
+- **AP a mastery jsou oddělené od XP/Levelu.** Každá profese má základní 1 AP. Mastery stars budou později přidávat další AP; nyní se připravuje pouze datové pole a žádné hvězdičky se negenerují.
+- Základní osobní carry capacity, bonus z Expedition Suit a malý bonus za Soldier level jsou samostatné modifikátory nosnosti. Operator bude mít vlastní profesní přínos k transportu; konkrétní výpočet zatím není součástí tohoto základu.
+
+#### Hranice aktuálního návrhu
+
+- Nyní se připravuje pouze katalog, výchozí profesní data a pomocné operace pro XP/level/efficiency/AP.
+- Neimplementuje se výběr počátečních specializací, náhodné mastery, denní reset/čerpání AP, pracovní příkazy, přiřazování tagů jednotlivým akcím, XP odměny konkrétních akcí, AI ani UI.
+- Celkový Pawn level a jeho vztah k profesním level-upům zůstává zachován jako dřívější návrh, ale není součástí této implementační vrstvy.
