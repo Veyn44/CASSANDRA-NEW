@@ -55,7 +55,7 @@ Stručný vývojový deník CASSANDRA-NEW. Zachycuje nejen změny v kódu, ale t
   - [2cae611 — pawn identity age and birthday](https://github.com/Veyn44/CASSANDRA-NEW/commit/2cae611c0554c5d8be61cdfe6099ba5e75f24052)
   - [4b5bfee — strategic calendar](https://github.com/Veyn44/CASSANDRA-NEW/commit/4b5bfee59c872ec9a37e153e52af7ba26753a161)
   - [77dd127 — commander identity integration](https://github.com/Veyn44/CASSANDRA-NEW/commit/77dd1271df37c3e8d673ea18287322904dddcfdb)
-  - [14a21b6 — crew identity integration](https://github.com/Veyn44/CASSANDRA-NEW/commit/14a21b661a272239a4b5cbaf78db5afea89e8439)
+  - [14a21b6 — crew identity integration](https://github.com/Veyn44/CASSANDRA-NEW/commit/14a21b661a2722394b5e9f2b4c5f7a5d6d3a1e0a)
   - [8034762 — game calendar integration](https://github.com/Veyn44/CASSANDRA-NEW/commit/8034762119e7b2e291e05947953f12868e8e3a8f)
   - [23ccd30 — calendar and dev controls UI](https://github.com/Veyn44/CASSANDRA-NEW/commit/23ccd308a02c15ca8c949b533c850983848f44c9)
   - [a604180 — dev controls styling](https://github.com/Veyn44/CASSANDRA-NEW/commit/a604180d975f24311feda2a73d7e6aa7b3defb80)
@@ -84,3 +84,11 @@ Stručný vývojový deník CASSANDRA-NEW. Zachycuje nejen změny v kódu, ale t
 - **Související implementace:** [9a58268 — BODY & GEAR layout](https://github.com/Veyn44/CASSANDRA-NEW/commit/9a58268daa8630dedf223b50a8fbb125d0695d7d), [9e158f7 — anatomy/suit/item data bindings](https://github.com/Veyn44/CASSANDRA-NEW/commit/9e158f74ab5f1ea9fc8361d69d30b800cc7b0def), [1dfade9 — BODY & GEAR styling](https://github.com/Veyn44/CASSANDRA-NEW/commit/1dfade971f162f17e571e465bd115f074a218e13).
 - **Výsledek:** uživatel potvrdil, že BODY & GEAR rozložení a jeho zobrazení funguje správně v runtime. Záložka obsahuje šest anatomických částí, odpovídající části Expedition Suit se sockety, PRIMARY/SECONDARY WEAPON, Q / UTILITY a šest osobních slotů.
 - **Rozsah potvrzení:** potvrzeno funkční zobrazení a současný datový základ. Damage routing, skutečné vybavování a interakce se sloty zůstávají neimplementované.
+
+### 2026-11-10 — Mira: Basic Expedition Suit / target dummy
+- **Implementační commity:**
+  - [34c3c2f — crew pawn suit fields](https://github.com/Veyn44/CASSANDRA-NEW/commit/34c3c2f96e41794189fa754a30498a28ab33994a)
+  - [6fd2d20 — equip Mira with basic suit](https://github.com/Veyn44/CASSANDRA-NEW/commit/6fd2d20cd65d823f0608163347aaeaa8eaf9907e)
+- **Kód:** crew pawn model nyní explicitně obsahuje `expeditionSuit` a `expeditionSuitStationId`. Mira při vytvoření nové hry dostane vlastní Basic Expedition Suit přes existující suit factory; oblek je ve stavu `equipped` a jeho umístění ukazuje na Miru.
+- **Herní důvod:** Mira slouží jako první target dummy pro budoucí testování zbraní, zásahů, poškození obleku a anatomie.
+- **Hranice:** jde pouze o přiřazení existujícího obleku. Damage System, armor hodnoty, zbraňové balancování a runtime test nebyly součástí této změny.
