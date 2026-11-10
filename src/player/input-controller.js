@@ -1,11 +1,13 @@
 export class InputController {
-  constructor(canvas, pawns, camera, clock, renderer) {
+  constructor(canvas, pawns, camera, clock, renderer, calendar) {
     this.canvas = canvas;
     this.pawns = pawns;
     this.commander = pawns[0];
     this.camera = camera;
     this.clock = clock;
     this.renderer = renderer;
+    this.calendar = calendar;
+    this.devMode = false;
     this.keys = new Set();
     this.dragging = false;
     this.lastPointer = null;
@@ -70,6 +72,9 @@ export class InputController {
     document.querySelector("#pawn-info-modal").addEventListener("click", (event) => {
       if (event.target.id === "pawn-info-modal") event.currentTarget.hidden = true;
     });
+    document.querySelector("#dev-mode-toggle").addEventListener("click", () => this.toggleDevMode());
+    document.querySelector("#set-day-button").addEventListener("click", () => this.setDayFromDevTools());
+    document.querySelector("#end-day-button").addEventListener("click", () => this.endDayFromDevTools());
     document.querySelector("#draft-button").addEventListener("click", () => this.toggleDraft());
     document.querySelector("#grid-button").addEventListener("click", () => {
       this.renderer.showGrid = !this.renderer.showGrid;
@@ -108,6 +113,7 @@ export class InputController {
     this.syncSelectedPawn();
     this.syncDraftUI();
     this.syncPauseUI();
+    this.syncDevModeUI();
   }
 
   handleKeyDown(event) {
@@ -124,6 +130,65 @@ export class InputController {
       }
     }
     this.keys.add(key);
+  }
+
+  toggleDevMode() {
+    this.devMode = !this.devMode;
+    this.syncDevModeUI();
+  }
+
+  syncDevModeUI() {
+    const button = document.querySelector("#dev-mode-toggle");
+    const panel = document.querySelector("#dev-tools-panel");
+    button.textContent = this.devMode ? "DEV MODE · ON" : "DEV MODE · OFF";
+    button.setAttribute("aria-pressed", String(this.devMode));
+    panel.hidden = !this.devMode;
+    document.querySelector("#dev-day-input").value = String(this.calendar.day);
+  }
+
+  setDayFromDevTools() {
+    if (!this.devMode) return;
+    const input = document.querySelector("#dev-day-input");
+    const nextDay = Number(input.value);
+    if (!Number.isInteger(nextDay) || nextDay < 1 || nextDay > 365) {
+      this.showToast("DAY MUST BE BETWEEN 1 AND 365");
+      input.value = String(this.calendar.day);
+      return;
+    }
+    this.calendar.day = nextDay;
+    this.showToast(`CALENDAR SET TO DAY ${String(nextDay).padStart(3, "0")} · AGE UNCHANGED`);
+  }
+
+  endDayFromDevTools() {
+    if (!this.devMode) return;
+    if (this.calendar.day === 365) {
+      this.calendar.day = 1;
+      this.calendar.year += 1;
+    } else {
+      this.calendar.day += 1;
+    }
+    const aged = [];
+    for (const pawn of this.pawns) {
+      if (pawn.birthdayDay === this.calendar.day) {
+        pawn.age += 1;
+        aged.push(pawn.name);
+      }
+    }
+    document.querySelector("#dev-day-input").value = String(this.calendar.day);
+    for (const pawn of this.pawns) {
+      if (pawn.id === this.selectedPawnId) this.syncInfoModal(pawn);
+    }
+    this.showToast(aged.length
+      ? `END DAY · BIRTHDAY: ${aged.join(", ")}`
+      : `END DAY · DAY ${String(this.calendar.day).padStart(3, "0")}`);
+  }
+
+  showToast(message) {
+    const toast = document.querySelector("#toast");
+    toast.textContent = message;
+    toast.classList.add("visible");
+    window.clearTimeout(this.toastTimeout);
+    this.toastTimeout = window.setTimeout(() => toast.classList.remove("visible"), 1500);
   }
 
   toggleDraft() {
@@ -150,13 +215,7 @@ export class InputController {
     if (this.commander.attack()) this.showAttackFeedback();
   }
 
-  showAttackFeedback() {
-    const toast = document.querySelector("#toast");
-    toast.textContent = "MELEE ATTACK";
-    toast.classList.add("visible");
-    window.clearTimeout(this.toastTimeout);
-    this.toastTimeout = window.setTimeout(() => toast.classList.remove("visible"), 420);
-  }
+  showAttackFeedback() { this.showToast("MELEE ATTACK"); }
 
   update() {
     if (this.clock.paused || !this.commander.drafted) {
@@ -169,10 +228,7 @@ export class InputController {
     const y = Number(this.keys.has("s")) - Number(this.keys.has("w"));
     this.commander.velocityX = x;
     this.commander.velocityY = y;
-    if (x !== 0 || y !== 0) {
-      // Any fresh WASD input restores direct camera follow without toggling Draft.
-      this.camera.centerOn(this.commander);
-    }
+    if (x !== 0 || y !== 0) this.camera.centerOn(this.commander);
     this.tryAttack();
   }
 
@@ -197,7 +253,7 @@ export class InputController {
     const setText = (id, value) => { const node = document.querySelector(id); if (node) node.textContent = value; };
     const setBar = (id, value) => { const node = document.querySelector(id); if (node) node.style.width = `${Math.max(0, Math.min(100, value))}%`; };
     setText("#selected-name", pawn.name.toUpperCase());
-    setText("#selected-role", `Human · Level ${String(pawn.level || 1).padStart(2, "0")}`);
+    setText("#selected-role", `Human · Age ${pawn.age}`);
     setText("#unit-state", pawn.drafted ? "DRAFTED" : "AUTONOMOUS");
     setText("#selected-health", `${pawn.health} / ${pawn.maxHealth}`);
     setText("#selected-stamina", `${pawn.stamina} / ${pawn.maxStamina}`);
@@ -217,6 +273,8 @@ export class InputController {
   syncInfoModal(pawn) {
     const values = {
       "#info-title": pawn.name.toUpperCase(),
+      "#info-age": `${pawn.age} YEARS`,
+      "#info-birthday": `DAY ${String(pawn.birthdayDay).padStart(3, "0")}`,
       "#info-health": `${pawn.health} / ${pawn.maxHealth}`,
       "#info-stamina": `${pawn.stamina} / ${pawn.maxStamina}`,
       "#info-carry": `${pawn.carriedWeight} / ${pawn.carryCapacity} kg`,
