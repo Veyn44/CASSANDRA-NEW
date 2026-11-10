@@ -397,3 +397,17 @@ Pilot se jako samostatná profese zatím nepoužije; řízení shuttle má být 
 - Nyní se připravuje pouze katalog, výchozí profesní data a pomocné operace pro XP/level/efficiency/AP.
 - Neimplementuje se výběr počátečních specializací, náhodné mastery, denní reset/čerpání AP, pracovní příkazy, přiřazování tagů jednotlivým akcím, XP odměny konkrétních akcí, AI ani UI.
 - Celkový Pawn level a jeho vztah k profesním level-upům zůstává zachován jako dřívější návrh, ale není součástí této implementační vrstvy.
+
+
+### 1.11 Výchozí mastery a XP křivka — oprava a UI
+
+Každý Pawn má všech devět profesí dostupných. Žádná profese není zamčená a žádná nemá nulové AP. Výchozí stav každé profese je **1 mastery star = 1 AP**. Mastery stars současně určují XP potřebné pro další profesní level:
+
+- 1 star: 100 XP na level.
+- 2 stars: 200 XP na level.
+- 3 stars: 300 XP na level.
+- Obecně: `XP required = 100 × masteryStars`.
+
+Level 1–30 a +10 % efficiency za level zůstávají beze změny. Mastery ovlivňuje AP a tempo dalšího levelování; level ovlivňuje efficiency. Všechny profese jsou dostupné každému Pawnovi a lze je rozvíjet jejich vykonáváním.
+
+Personnel UI obsahuje samostatnou záložku **PROFESSIONS** se všemi devíti profesemi, Level, XP progress barem, efficiency, AP a mastery stars. Konkrétní pracovní úkony, jejich tagy a XP odměny se doplní později.
