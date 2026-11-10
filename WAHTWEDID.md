@@ -102,7 +102,7 @@ Stručný vývojový deník CASSANDRA-NEW. Zachycuje nejen změny v kódu, ale t
   - [b451512 — commander profession initialization](https://github.com/Veyn44/CASSANDRA-NEW/commit/b451512476863ea4e0266f331a3ae40a34acdc93)
   - [b64b550 — WHATTODO profession model](https://github.com/Veyn44/CASSANDRA-NEW/commit/b64b550c2a4b3f4cf2dbaf89a14e42429aff477a)
   - [7fd1303 — WAHTWEDID entry](https://github.com/Veyn44/CASSANDRA-NEW/commit/7fd130389c7bd0106aa3345c7585793191643c8d)
-  - [
+  - [1c5709a — mastery AP constant](https://github.com/Veyn44/CASSANDRA-NEW/commit/1c5709a8d5a4a9cee8d2e126cd862382a4ace6a6)
 - **Kód:** připraven katalog devíti profesních tagů (Mining, Engineering, Material Science, Technician, Science, Fabrication, Soldier, Medicine, Operator), výchozí profesní progression pro Commander i crew Pawny a pomocné funkce pro XP, level, efficiency a AP.
 - **Výchozí stav profese:** Level 1, XP 0/100, base AP 1, masteryStars 0. Každých 100 XP zvyšuje level, přebytečné XP se přenášejí, maximum je Level 30. Efficiency je odvozena jako 10 % za Level (Level 1 = 10 %, Level 30 = 300 %). AP se počítá odděleně jako base AP + mastery stars.
 - **Herní důvod:** všechny pracovní úkony budou mít právě jeden profesní tag; XP rozvíjí pouze odpovídající profesi. Operator sjednocuje budoucí hauling/transport/transportní robotiku; Pilot zatím není samostatná profese.
