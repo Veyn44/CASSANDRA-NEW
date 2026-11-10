@@ -1,4 +1,5 @@
 import { GameClock } from "./game-clock.js";
+import { createStrategicCalendar } from "./strategic-calendar.js";
 import { Camera } from "../camera/camera.js";
 import { createCommander } from "../entities/pawns/commander.js";
 import { createCrewMember } from "../entities/pawns/crew-member.js";
@@ -9,6 +10,7 @@ import { Renderer } from "../rendering/renderer.js";
 
 export function createGame({ canvas }) {
   const clock = new GameClock();
+  const calendar = createStrategicCalendar();
   const world = createWorld();
   const commander = createCommander({ x: 24.5, y: 20.5 });
   // New Game starts with one basic suit so the commander can leave the outpost.
@@ -22,7 +24,7 @@ export function createGame({ canvas }) {
   ];
   const camera = new Camera();
   const renderer = new Renderer(canvas, world, crew, camera);
-  const input = new InputController(canvas, crew, camera, clock, renderer);
+  const input = new InputController(canvas, crew, camera, clock, renderer, calendar);
 
   let frameId = 0;
   let previousTime = 0;
@@ -44,6 +46,7 @@ export function createGame({ canvas }) {
     renderer.render(elapsed, clock.paused, timestamp / 1000);
 
     document.querySelector("#clock-readout").textContent = formatClock(elapsed);
+    document.querySelector("#calendar-readout").textContent = formatCalendar(calendar);
     document.querySelector("#coords-readout").textContent =
       `X ${String(Math.floor(commander.x)).padStart(3, "0")} · Y ${String(Math.floor(commander.y)).padStart(3, "0")}`;
     document.querySelector("#camera-readout").textContent = `ZOOM ${Math.round(camera.zoom * 100)}%`;
@@ -61,7 +64,7 @@ export function createGame({ canvas }) {
     cancelAnimationFrame(frameId);
     input.destroy();
   }
-  return { start, destroy, clock, world, commander, crew, camera };
+  return { start, destroy, clock, calendar, world, commander, crew, camera };
 }
 
 function formatClock(seconds) {
@@ -70,4 +73,7 @@ function formatClock(seconds) {
   const minutes = Math.floor((total % 3600) / 60);
   const secs = total % 60;
   return [hours, minutes, secs].map((value) => String(value).padStart(2, "0")).join(":");
+}
+function formatCalendar(calendar) {
+  return `DAY ${String(calendar.day).padStart(3, "0")} · YEAR ${calendar.year}`;
 }
