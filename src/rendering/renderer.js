@@ -40,7 +40,7 @@ export class Renderer {
     this.drawTerrain(ctx, left, top, right, bottom, tile);
     this.drawGrid(ctx, left, top, right, bottom, tile, width, height);
     this.drawModules(ctx, left, top, tile);
-    this.drawCommander(ctx, left, top, tile);
+    this.drawCommander(ctx, left, top, tile, elapsed);
     this.drawAmbientDetails(ctx, left, top, right, bottom, tile, elapsed);
   }
 
@@ -110,27 +110,63 @@ export class Renderer {
     }
   }
 
-  drawCommander(ctx, left, top, tile) {
+  drawCommander(ctx, left, top, tile, elapsed) {
     const x = (this.commander.x - left) * tile;
     const y = (this.commander.y - top) * tile;
     const radius = Math.max(5, tile * 0.27);
+    const attackProgress = this.commander.attackTimer > 0
+      ? 1 - this.commander.attackTimer / 0.2
+      : 0;
+
     ctx.save();
     ctx.translate(x, y);
-    ctx.fillStyle = "rgba(101,214,209,0.15)";
+
+    // Short forward jab: deliberately simple, with no arm or hand sprite yet.
+    if (this.commander.attackTimer > 0) {
+      const reach = radius * (1.25 + Math.sin(attackProgress * Math.PI) * 0.85);
+      ctx.save();
+      ctx.rotate(this.commander.rotation);
+      ctx.strokeStyle = `rgba(225,248,245,${0.8 * (1 - attackProgress)})`;
+      ctx.lineWidth = Math.max(2, radius * 0.22);
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(radius * 0.55, 0);
+      ctx.lineTo(reach, 0);
+      ctx.stroke();
+      ctx.fillStyle = `rgba(101,214,209,${0.22 * (1 - attackProgress)})`;
+      ctx.beginPath();
+      ctx.arc(reach, 0, radius * 0.38, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    ctx.fillStyle = this.commander.drafted ? "rgba(101,214,209,0.22)" : "rgba(101,214,209,0.12)";
     ctx.beginPath();
     ctx.arc(0, 0, radius * 2.1, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = "#65d6d1";
-    ctx.strokeStyle = "#d1fffa";
+
+    ctx.fillStyle = this.commander.drafted ? "#78eee4" : "#65d6d1";
+    ctx.strokeStyle = this.commander.drafted ? "#f0fffc" : "#d1fffa";
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.arc(0, 0, radius, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
+
+    // The dark inner core is the pawn's visible facing indicator.
+    ctx.rotate(this.commander.rotation);
     ctx.fillStyle = "#10252b";
     ctx.beginPath();
-    ctx.arc(0, -radius * 0.15, radius * 0.32, 0, Math.PI * 2);
+    ctx.arc(radius * 0.43, 0, radius * 0.34, 0, Math.PI * 2);
     ctx.fill();
+
+    if (this.commander.drafted) {
+      ctx.strokeStyle = "rgba(120,238,228,0.5)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(0, 0, radius * 1.55 + Math.sin(elapsed * 5) * 0.8, 0, Math.PI * 2);
+      ctx.stroke();
+    }
     ctx.restore();
   }
 
