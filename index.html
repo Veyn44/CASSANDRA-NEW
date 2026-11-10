@@ -78,7 +78,48 @@
         <div class="viewport-bottom"><span><i class="legend-dot commander-dot"></i> COMMANDER</span><span><i class="legend-dot base-dot"></i> OUTPOST MODULE</span><span id="camera-readout">ZOOM 100%</span></div>
         
         <div id="toast" class="toast" role="status" aria-live="polite"></div>
-        <section id="pawn-info-modal" class="modal-backdrop" hidden><div class="modal-panel"><header><div><small>PERSONNEL RECORD</small><h2 id="info-title">COMMANDER</h2></div><button class="modal-close" data-close-modal>×</button></header><div class="modal-grid"><div><span>AGE</span><strong id="info-age">32 YEARS</strong></div><div><span>BIRTHDAY</span><strong id="info-birthday">DAY 152</strong></div><div><span>HEALTH</span><strong id="info-health">100 / 100</strong></div><div><span>STAMINA</span><strong id="info-stamina">100 / 100</strong></div><div><span>CARRY CAPACITY</span><strong id="info-carry">0 / 30 kg</strong></div><div><span>WEAPON</span><strong id="info-weapon">UNARMED</strong></div><div><span>COMMAND</span><strong id="info-order">HOLD</strong></div><div><span>POSITION</span><strong id="info-position">24.50, 20.50</strong></div></div><p>ATTRIBUTES, ARMOR, INVENTORY AND GEAR WILL BE EXPANDED HERE.</p></div></section>
+        <section id="pawn-info-modal" class="modal-backdrop personnel-backdrop" hidden>
+          <div class="personnel-panel">
+            <header class="personnel-header">
+              <div><small>PERSONNEL DATABASE / UNIT PROFILE</small><h2 id="info-title">COMMANDER</h2><span class="personnel-subtitle">CREW MEMBER · HUMAN</span></div>
+              <button class="modal-close" data-close-modal aria-label="Close personnel record">×</button>
+            </header>
+            <div class="personnel-layout">
+              <aside class="personnel-identity">
+                <div class="personnel-portrait"><span id="info-initial">C</span><i></i></div>
+                <div class="personnel-id-label">UNIT IDENTIFICATION</div>
+                <strong id="info-id">COMMANDER</strong>
+                <div class="personnel-divider"></div>
+                <div class="personnel-mini-stat"><span>SPECIES</span><strong>HUMAN</strong></div>
+                <div class="personnel-mini-stat"><span>UNIT STATUS</span><strong id="info-unit-status">AUTONOMOUS</strong></div>
+                <div class="personnel-mini-stat"><span>CURRENT ORDER</span><strong id="info-order">HOLD</strong></div>
+              </aside>
+              <div class="personnel-main">
+                <div class="personnel-section-heading"><span>01 / BIO</span><small>PERSONAL RECORD</small></div>
+                <div class="bio-facts">
+                  <article class="bio-fact bio-fact-primary"><span>AGE</span><strong id="info-age">32 YEARS</strong><small>Current age</small></article>
+                  <article class="bio-fact bio-fact-primary"><span>BIRTHDAY</span><strong id="info-birthday">DAY 152</strong><small>Strategic calendar · 365 days</small></article>
+                  <article class="bio-fact"><span>ORIGIN</span><strong>NOT RECORDED</strong><small>Personal history unavailable</small></article>
+                  <article class="bio-fact"><span>BACKGROUND</span><strong>NOT RECORDED</strong><small>No biography assigned</small></article>
+                </div>
+                <div class="personnel-section-heading personnel-section-spaced"><span>PERSONAL NOTES</span><small> BIOGRAPHY</small></div>
+                <div class="bio-description"><span class="bio-placeholder-mark">＋</span><div><strong>NO BIOGRAPHY AVAILABLE</strong><p>This unit has no recorded personal description yet. Background and personality data can be added when the pawn generation system is defined.</p></div></div>
+              </div>
+              <aside class="personnel-status">
+                <div class="personnel-section-heading"><span>02 / STATUS</span><small>LIVE DATA</small></div>
+                <div class="personnel-status-row"><span>HEALTH</span><strong id="info-health">100 / 100</strong></div>
+                <div class="personnel-meter"><i id="info-health-bar"></i></div>
+                <div class="personnel-status-row"><span>STAMINA</span><strong id="info-stamina">100 / 100</strong></div>
+                <div class="personnel-meter stamina"><i id="info-stamina-bar"></i></div>
+                <div class="personnel-status-row"><span>CARRY LOAD</span><strong id="info-carry">0 / 30 kg</strong></div>
+                <div class="personnel-status-row personnel-status-separated"><span>WEAPON</span><strong id="info-weapon">UNARMED</strong></div>
+                <div class="personnel-status-row"><span>POSITION</span><strong id="info-position">24.50, 20.50</strong></div>
+                <div class="personnel-footnote">Live values reflect the selected pawn's current runtime state.</div>
+              </aside>
+            </div>
+            <footer class="personnel-footer"><span><i class="status-dot"></i> PERSONNEL RECORD / CASSANDRA</span><span>PROFILE VIEW · BIO</span></footer>
+          </div>
+        </section>
         <section id="settings-modal" class="modal-backdrop" hidden><div class="modal-panel"><header><div><small>GAME MENU</small><h2>SETTINGS</h2></div><button class="modal-close" data-close-modal>×</button></header><div class="settings-links"><button>SETTINGS · COMING SOON</button><button>CONTROLS · WASD / LMB / R / E / Q / SPACE</button><button id="dev-mode-toggle" type="button" aria-pressed="false">DEV MODE · OFF</button></div><section id="dev-tools-panel" class="dev-tools-panel" hidden><div class="section-label">STRATEGIC CALENDAR</div><label for="dev-day-input">SET DAY (1–365)</label><div class="dev-day-row"><input id="dev-day-input" type="number" min="1" max="365" step="1" value="1"><button id="set-day-button" type="button">SET DAY</button></div><button id="end-day-button" class="end-day-button" type="button">END DAY</button><small>Age and birthdays are evaluated only when END DAY is pressed.</small></section></div></section>
       </section>
       <aside class="right-rail">
