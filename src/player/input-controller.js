@@ -56,6 +56,20 @@ export class InputController {
     window.addEventListener("pointerup", this.onPointerUp);
     window.addEventListener("blur", () => { this.attackHeld = false; this.keys.clear(); });
     document.querySelector("#pause-button").addEventListener("click", () => this.togglePause());
+    document.querySelector("#pawn-info-button").addEventListener("click", () => {
+      const pawn = this.pawns.find((item) => item.id === this.selectedPawnId) || this.commander;
+      this.syncInfoModal(pawn);
+      document.querySelector("#pawn-info-modal").hidden = false;
+    });
+    document.querySelectorAll("[data-close-modal]").forEach((button) => button.addEventListener("click", () => {
+      button.closest(".modal-backdrop").hidden = true;
+    }));
+    document.querySelector("#settings-modal").addEventListener("click", (event) => {
+      if (event.target.id === "settings-modal") event.currentTarget.hidden = true;
+    });
+    document.querySelector("#pawn-info-modal").addEventListener("click", (event) => {
+      if (event.target.id === "pawn-info-modal") event.currentTarget.hidden = true;
+    });
     document.querySelector("#draft-button").addEventListener("click", () => this.toggleDraft());
     document.querySelector("#grid-button").addEventListener("click", () => {
       this.renderer.showGrid = !this.renderer.showGrid;
@@ -66,13 +80,21 @@ export class InputController {
     document.querySelectorAll("[data-speed]").forEach((button) => {
       button.addEventListener("click", () => {
         if (Number(button.dataset.speed) === 0) this.clock.setPaused(true);
-        else { this.clock.setSpeed(Number(button.dataset.speed)); this.clock.setPaused(false); }
+        else this.clock.setSpeed(Number(button.dataset.speed));
         this.syncPauseUI();
         this.syncSpeedUI();
       });
     });
     document.querySelector("#crew-command-bar").addEventListener("click", (event) => {
       const button = event.target.closest("[data-order]");
+      const card = event.target.closest(".crew-card");
+      if (card && !card.classList.contains("empty-slot")) {
+        const selected = this.pawns.find((item) => item.id === card.dataset.pawnId);
+        if (selected && this.clock.paused) {
+          this.selectedPawnId = selected.id;
+          this.syncSelectedPawn();
+        }
+      }
       if (!button || !this.clock.paused) return;
       const pawn = this.pawns.find((item) => item.id === button.dataset.pawnId);
       if (!pawn) return;
@@ -80,8 +102,10 @@ export class InputController {
       pawn.commandRevision += 1;
       this.selectedPawnId = pawn.id;
       this.syncCommandBar();
+      this.syncSelectedPawn();
     });
     this.syncCommandBar();
+    this.syncSelectedPawn();
     this.syncDraftUI();
     this.syncPauseUI();
   }
@@ -91,10 +115,13 @@ export class InputController {
     if (["w", "a", "s", "d", " "].includes(key)) event.preventDefault();
     if (key === " " && !event.repeat) this.togglePause();
     if (key === "f" && !event.repeat && !this.clock.paused) this.toggleDraft();
-    if (key === "escape") {
-      this.clock.setPaused(true);
-      this.syncPauseUI();
-      this.syncSpeedUI();
+    if (key === "escape" && !event.repeat) {
+      const settings = document.querySelector("#settings-modal");
+      settings.hidden = !settings.hidden;
+      if (!settings.hidden) {
+        this.attackHeld = false;
+        this.keys.clear();
+      }
     }
     this.keys.add(key);
   }
@@ -152,7 +179,6 @@ export class InputController {
   togglePause() {
     this.clock.togglePause();
     this.attackHeld = false;
-    this.keys.clear();
     if (this.clock.paused) {
       this.commander.velocityX = 0;
       this.commander.velocityY = 0;
@@ -160,6 +186,48 @@ export class InputController {
     this.syncPauseUI();
     this.syncSpeedUI();
     this.syncCommandBar();
+    if (!this.clock.paused) {
+      this.selectedPawnId = this.commander.id;
+      this.syncSelectedPawn();
+    }
+  }
+
+  syncSelectedPawn() {
+    const pawn = this.pawns.find((item) => item.id === this.selectedPawnId) || this.commander;
+    const setText = (id, value) => { const node = document.querySelector(id); if (node) node.textContent = value; };
+    const setBar = (id, value) => { const node = document.querySelector(id); if (node) node.style.width = `${Math.max(0, Math.min(100, value))}%`; };
+    setText("#selected-name", pawn.name.toUpperCase());
+    setText("#selected-role", `Human · Level ${String(pawn.level || 1).padStart(2, "0")}`);
+    setText("#unit-state", pawn.drafted ? "DRAFTED" : "AUTONOMOUS");
+    setText("#selected-health", `${pawn.health} / ${pawn.maxHealth}`);
+    setText("#selected-stamina", `${pawn.stamina} / ${pawn.maxStamina}`);
+    setText("#selected-carry", `${pawn.carriedWeight} / ${pawn.carryCapacity} kg`);
+    setText("#selected-weapon", pawn.weapon?.name || "UNARMED");
+    setText("#selected-order", pawn.commandOrder.toUpperCase());
+    setBar("#selected-health-bar", pawn.health / pawn.maxHealth * 100);
+    setBar("#selected-stamina-bar", pawn.stamina / pawn.maxStamina * 100);
+    setBar("#selected-carry-bar", pawn.carriedWeight / pawn.carryCapacity * 100);
+    const portrait = document.querySelector("#selected-portrait span");
+    if (portrait) portrait.textContent = pawn.name.slice(0, 1).toUpperCase();
+    const info = document.querySelector("#pawn-info-modal");
+    if (info && !info.hidden) this.syncInfoModal(pawn);
+    document.querySelectorAll(".crew-card[data-pawn-id]").forEach((card) => card.classList.toggle("selected-pawn", card.dataset.pawnId === pawn.id));
+  }
+
+  syncInfoModal(pawn) {
+    const values = {
+      "#info-title": pawn.name.toUpperCase(),
+      "#info-health": `${pawn.health} / ${pawn.maxHealth}`,
+      "#info-stamina": `${pawn.stamina} / ${pawn.maxStamina}`,
+      "#info-carry": `${pawn.carriedWeight} / ${pawn.carryCapacity} kg`,
+      "#info-weapon": pawn.weapon?.name || "UNARMED",
+      "#info-order": pawn.commandOrder.toUpperCase(),
+      "#info-position": `${pawn.x.toFixed(2)}, ${pawn.y.toFixed(2)}`
+    };
+    for (const [selector, value] of Object.entries(values)) {
+      const node = document.querySelector(selector);
+      if (node) node.textContent = value;
+    }
   }
 
   syncDraftUI() {
@@ -185,7 +253,10 @@ export class InputController {
   syncSpeedUI() {
     document.querySelector("#speed-label").textContent = this.clock.paused ? "Ⅱ" : `${this.clock.speed}×`;
     document.querySelectorAll("[data-speed]").forEach((button) => {
-      button.classList.toggle("active", Number(button.dataset.speed) === (this.clock.paused ? 0 : this.clock.speed));
+      button.classList.toggle("active", Number(button.dataset.speed) === (Number(button.dataset.speed) === 0 ? 0 : this.clock.speed));
+    });
+    document.querySelector("#speed-label").textContent = `${this.clock.speed}×`;
+    document.querySelector("#pause-button").classList.toggle("paused", this.clock.paused);
     });
   }
 
@@ -194,13 +265,19 @@ export class InputController {
     bar.classList.toggle("commands-enabled", this.clock.paused);
     bar.querySelectorAll("[data-order]").forEach((button) => {
       const pawn = this.pawns.find((item) => item.id === button.dataset.pawnId);
-      button.disabled = !this.clock.paused;
+      button.disabled = !this.clock.paused || !pawn;
       button.classList.toggle("selected", pawn?.commandOrder === button.dataset.order);
     });
     bar.querySelectorAll(".crew-card").forEach((card) => {
       const pawn = this.pawns.find((item) => item.id === card.dataset.pawnId);
       const order = card.querySelector(".crew-order");
       if (pawn && order) order.textContent = pawn.commandOrder.toUpperCase();
+      if (pawn) {
+        const health = card.querySelector(".crew-bar.health i");
+        const carry = card.querySelector(".crew-bar.carry i");
+        if (health) health.style.width = `${pawn.health / pawn.maxHealth * 100}%`;
+        if (carry) carry.style.width = `${pawn.carriedWeight / pawn.carryCapacity * 100}%`;
+      }
     });
   }
 
