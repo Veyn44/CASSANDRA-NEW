@@ -32,7 +32,7 @@ export function createGame({ canvas }) {
 
     input.update(delta);
     if (!clock.paused) {
-      for (const pawn of crew) pawn.update(delta, world);
+      for (const pawn of crew) pawn.update(delta, world, crew);
     }
     camera.follow(commander, delta, commander.drafted && !camera.manual);
     renderer.render(elapsed, clock.paused);
