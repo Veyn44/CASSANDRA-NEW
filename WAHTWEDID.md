@@ -69,3 +69,8 @@ Stručný vývojový deník CASSANDRA-NEW. Zachycuje nejen změny v kódu, ale t
 - **Kód:** původní malé INFO okno bylo rozšířeno na velký personnel BIO profil s identifikačním panelem, osobními údaji, prostorem pro budoucí biografii a živým přehledem stavu.
 - **Hranice:** implementována pouze obrazovka BIO. BODY, Expedition Suit, Equipment, Conditions a History zůstávají mimo tento krok; neznámý původ a biografie se zobrazují jako nezadané, nevymýšlí se.
 - **Ověření:** změny zapsány do GitHubu; runtime/browser test nebyl proveden.
+### 2026-11-10 — Full Unit Details: BIO / GEAR navigation
+- **Implementační commity:** [9ee1c9a — BIO and GEAR tab markup](https://github.com/Veyn44/CASSANDRA-NEW/commit/9ee1c9a72c448273e668a44e54745e218ce24ba3), [c91c9af — tab switching and live gear summary](https://github.com/Veyn44/CASSANDRA-NEW/commit/c91c9afbe2c99cd48e28a1e8ff635cb1cc70f65f), [4e84f9c — tab and GEAR styling](https://github.com/Veyn44/CASSANDRA-NEW/commit/4e84f9cf35451c95373efc92865d0ac5b4d849c9).
+- **Kód:** vedle jména pawna jsou navigační záložky BIO a GEAR. BIO zachovává dosavadní profil; GEAR ukazuje aktuální zbraň a informaci o přiřazení Expedition Suit. Přepínání probíhá uvnitř stejného personnel panelu.
+- **Hranice:** GEAR je zatím přehledová kostra; správa inventáře, jednotlivých částí obleku a modulů není implementována. Další záložky nebyly přidány.
+- **Ověření:** změny zapsány do GitHubu; runtime/browser test nebyl proveden.
