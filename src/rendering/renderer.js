@@ -37,10 +37,10 @@ export class Renderer {
     ctx.clearRect(0, 0, width, height);
     ctx.fillStyle = "#0a1219";
     ctx.fillRect(0, 0, width, height);
-    this.drawTerrain(ctx, left, top, right, bottom, tile, width, height);
+    this.drawTerrain(ctx, left, top, right, bottom, tile);
     this.drawGrid(ctx, left, top, right, bottom, tile, width, height);
     this.drawModules(ctx, left, top, tile);
-    this.drawCommander(ctx, tile, width, height);
+    this.drawCommander(ctx, left, top, tile);
     this.drawAmbientDetails(ctx, left, top, right, bottom, tile, elapsed);
   }
 
@@ -110,9 +110,9 @@ export class Renderer {
     }
   }
 
-  drawCommander(ctx, tile, width, height) {
-    const x = width / 2;
-    const y = height / 2;
+  drawCommander(ctx, left, top, tile) {
+    const x = (this.commander.x - left) * tile;
+    const y = (this.commander.y - top) * tile;
     const radius = Math.max(5, tile * 0.27);
     ctx.save();
     ctx.translate(x, y);
