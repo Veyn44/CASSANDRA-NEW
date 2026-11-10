@@ -54,6 +54,7 @@ export class InputController {
     window.addEventListener("pointermove", this.onPointerMove);
     window.addEventListener("pointerup", this.onPointerUp);
     document.querySelector("#pause-button").addEventListener("click", () => this.togglePause());
+    document.querySelector("#draft-button").addEventListener("click", () => this.toggleDraft());
     document.querySelector("#grid-button").addEventListener("click", () => {
       this.renderer.showGrid = !this.renderer.showGrid;
       document.querySelector("#grid-button").classList.toggle("active", this.renderer.showGrid);
