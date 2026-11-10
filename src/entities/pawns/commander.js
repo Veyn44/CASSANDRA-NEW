@@ -20,6 +20,8 @@ export function createCommander({ x, y }) {
     carryCapacity: 30,
     carriedWeight: 0,
     weapon: null,
+    expeditionSuit: null,
+    expeditionSuitStationId: null,
     commandOrder: "hold",
     commandRevision: 0,
     attackTimer: 0,

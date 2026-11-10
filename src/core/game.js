@@ -2,6 +2,7 @@ import { GameClock } from "./game-clock.js";
 import { Camera } from "../camera/camera.js";
 import { createCommander } from "../entities/pawns/commander.js";
 import { createCrewMember } from "../entities/pawns/crew-member.js";
+import { createSuitForPawn } from "../entities/pawns/equipment/suit-factory.js";
 import { createWorld } from "../world/world.js";
 import { InputController } from "../player/input-controller.js";
 import { Renderer } from "../rendering/renderer.js";
@@ -10,6 +11,11 @@ export function createGame({ canvas }) {
   const clock = new GameClock();
   const world = createWorld();
   const commander = createCommander({ x: 24.5, y: 20.5 });
+  // New Game starts with one basic suit so the commander can leave the outpost.
+  commander.expeditionSuit = createSuitForPawn(commander, { id: "suit-commander-basic" });
+  commander.expeditionSuit.state = "equipped";
+  commander.expeditionSuit.location = { type: "pawn", pawnId: commander.id };
+
   const crew = [
     commander,
     createCrewMember({ id: "crew-02", name: "Mira", x: 21.5, y: 24.5, color: "#e6b95f" }),
