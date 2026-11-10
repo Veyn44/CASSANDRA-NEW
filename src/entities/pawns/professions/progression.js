@@ -1,5 +1,6 @@
 import {
   PROFESSION_BASE_AP,
+  PROFESSION_AP_PER_MASTERY_STAR,
   PROFESSION_EFFICIENCY_PER_LEVEL,
   PROFESSION_IDS,
   PROFESSION_MAX_LEVEL,
@@ -28,7 +29,7 @@ export function getProfessionEfficiency(profession) {
 
 export function getProfessionAP(profession) {
   if (!profession) return 0;
-  return profession.baseAP + profession.masteryStars;
+  return profession.baseAP + profession.masteryStars * PROFESSION_AP_PER_MASTERY_STAR;
 }
 
 export function addProfessionXP(professions, professionId, amount) {
