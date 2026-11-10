@@ -1,8 +1,11 @@
 import { moveEntity } from "../../navigation/movement.js";
+import { createPawnIdentity } from "./identity/identity.js";
 
-export function createCrewMember({ id, name, x, y, color = "#e6b95f" }) {
+export function createCrewMember({ id, name, x, y, color = "#e6b95f", age, birthdayDay }) {
   return {
-    id, name, x, y, color,
+    id,
+    ...createPawnIdentity({ name, age, birthdayDay }),
+    x, y, color,
     radius: 0.28,
     speed: 3.8,
     rotation: Math.PI / 2,
