@@ -81,9 +81,14 @@
         <section id="pawn-info-modal" class="modal-backdrop personnel-backdrop" hidden>
           <div class="personnel-panel">
             <header class="personnel-header">
-              <div><small>PERSONNEL DATABASE / UNIT PROFILE</small><h2 id="info-title">COMMANDER</h2><span class="personnel-subtitle">CREW MEMBER · HUMAN</span></div>
+              <div class="personnel-heading-copy"><small>PERSONNEL DATABASE / UNIT PROFILE</small><h2 id="info-title">COMMANDER</h2><span class="personnel-subtitle">CREW MEMBER · HUMAN</span></div>
+              <nav class="personnel-tabs" aria-label="Personnel sections">
+                <button type="button" class="personnel-tab active" data-personnel-tab="bio" aria-selected="true">BIO</button>
+                <button type="button" class="personnel-tab" data-personnel-tab="gear" aria-selected="false">GEAR</button>
+              </nav>
               <button class="modal-close" data-close-modal aria-label="Close personnel record">×</button>
             </header>
+            <section class="personnel-tab-content" data-personnel-content="bio">
             <div class="personnel-layout">
               <aside class="personnel-identity">
                 <div class="personnel-portrait"><span id="info-initial">C</span><i></i></div>
@@ -117,7 +122,25 @@
                 <div class="personnel-footnote">Live values reflect the selected pawn's current runtime state.</div>
               </aside>
             </div>
-            <footer class="personnel-footer"><span><i class="status-dot"></i> PERSONNEL RECORD / CASSANDRA</span><span>PROFILE VIEW · BIO</span></footer>
+            </section>
+            <section class="personnel-tab-content gear-tab-content" data-personnel-content="gear" hidden>
+              <div class="personnel-section-heading"><span>01 / GEAR</span><small>ASSIGNED EQUIPMENT</small></div>
+              <div class="gear-overview-grid">
+                <article class="gear-overview-card">
+                  <div class="gear-card-icon">⌁</div>
+                  <div><span>PRIMARY WEAPON</span><strong id="gear-weapon">UNARMED</strong><small>Current weapon assignment</small></div>
+                </article>
+                <article class="gear-overview-card">
+                  <div class="gear-card-icon">⬡</div>
+                  <div><span>EXPEDITION SUIT</span><strong id="gear-suit">NOT EQUIPPED</strong><small id="gear-suit-detail">No suit assigned to this unit</small></div>
+                </article>
+              </div>
+              <div class="gear-placeholder">
+                <span class="bio-placeholder-mark">＋</span>
+                <div><strong>GEAR MANAGEMENT NOT YET AVAILABLE</strong><p>This section is a preview of the equipment record. Suit components, module slots, inventory and equipment interaction will be connected when their systems and interfaces are ready.</p></div>
+              </div>
+            </section>
+            <footer class="personnel-footer"><span><i class="status-dot"></i> PERSONNEL RECORD / CASSANDRA</span><span id="personnel-view-label">PROFILE VIEW · BIO</span></footer>
           </div>
         </section>
         <section id="settings-modal" class="modal-backdrop" hidden><div class="modal-panel"><header><div><small>GAME MENU</small><h2>SETTINGS</h2></div><button class="modal-close" data-close-modal>×</button></header><div class="settings-links"><button>SETTINGS · COMING SOON</button><button>CONTROLS · WASD / LMB / R / E / Q / SPACE</button><button id="dev-mode-toggle" type="button" aria-pressed="false">DEV MODE · OFF</button></div><section id="dev-tools-panel" class="dev-tools-panel" hidden><div class="section-label">STRATEGIC CALENDAR</div><label for="dev-day-input">SET DAY (1–365)</label><div class="dev-day-row"><input id="dev-day-input" type="number" min="1" max="365" step="1" value="1"><button id="set-day-button" type="button">SET DAY</button></div><button id="end-day-button" class="end-day-button" type="button">END DAY</button><small>Age and birthdays are evaluated only when END DAY is pressed.</small></section></div></section>
