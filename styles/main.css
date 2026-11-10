@@ -172,3 +172,43 @@
 .gear-placeholder strong{font-size:9px;letter-spacing:.8px;color:#c5d5dc}
 .gear-placeholder p{font-size:9px;line-height:1.7;color:var(--muted);margin:7px 0 0;max-width:720px}
 @media(max-width:700px){.personnel-header{flex-wrap:wrap;gap:12px}.personnel-heading-copy{min-width:0;flex:1}.personnel-tabs{order:3;width:100%;margin:0;align-self:auto;border-top:1px solid var(--line);padding-top:8px}.personnel-tab{flex:1}.gear-overview-grid{grid-template-columns:1fr}}
+
+/* BODY & GEAR: fixed anatomy and independent suit protection loadout. */
+.gear-tab-content{overflow:auto;min-height:0;padding:2px 0 18px}
+.body-suit-columns{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:13px}
+.loadout-column{min-width:0;padding:13px;background:#0f1c26;border:1px solid #2a414e}
+.loadout-column>header{display:flex;justify-content:space-between;align-items:center;gap:8px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.loadout-column>header>div{display:flex;flex-direction:column;gap:4px}
+.loadout-column>header strong{font:700 15px Rajdhani,sans-serif;letter-spacing:1px;color:var(--cyan)}
+.loadout-column>header small,.loadout-column>header>b{font-size:8px;letter-spacing:.6px;color:var(--muted)}
+.loadout-column>header>b{color:var(--text);text-align:right}
+.part-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-top:10px}
+.anatomy-part,.suit-part{min-width:0;padding:9px;background:#13232e;border:1px solid #293e4b}
+.part-label{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.part-label strong{font-size:8px;letter-spacing:.6px}
+.part-label b{font-size:8px;color:#c5d5dc;white-space:nowrap}
+.part-hp-track{height:5px;margin:8px 0 6px;background:#263a44;overflow:hidden}
+.part-hp-track i{display:block;height:100%;background:var(--green);transition:width .15s}
+.suit-track i{background:var(--cyan)}
+.anatomy-part>small,.suit-part-bottom>small{font-size:7px;letter-spacing:.6px;color:var(--muted)}
+.suit-part-bottom{display:flex;justify-content:space-between;align-items:center;gap:4px}
+.module-socket{display:inline-flex;align-items:center;gap:3px;padding:3px 5px;border:1px solid #42636c;color:var(--cyan);font-size:12px;line-height:1}
+.module-socket small{font-size:6px;letter-spacing:.4px}
+.module-socket.socket-occupied{background:#1c3937;border-color:var(--green);color:var(--green)}
+.weapon-loadout{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:13px}
+.loadout-slot{min-width:0;padding:12px 14px;background:#111f2a;border:1px solid #304653}
+.loadout-slot-heading{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:11px}
+.loadout-slot-heading span{font-size:8px;letter-spacing:.8px;color:var(--cyan)}
+.loadout-slot-heading small{font-size:7px;color:var(--muted)}
+.loadout-slot>strong{font:700 16px Rajdhani,sans-serif;letter-spacing:.7px}
+.slot-hint{display:block;margin-top:4px;font-size:7px;color:var(--muted)}
+.personal-loadout{display:grid;grid-template-columns:minmax(130px,.7fr) minmax(0,2fr);gap:14px;margin-top:13px}
+.utility-loadout,.personal-items-loadout{min-width:0;padding:12px;background:#0f1c26;border:1px solid #2a414e}
+.empty-item-slot{min-height:64px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;background:#13232e;border:1px dashed #3a5360}
+.empty-item-slot>b,.personal-item-slot>b{font:500 19px Rajdhani,sans-serif;color:var(--cyan)}
+.empty-item-slot small,.personal-item-slot small{font-size:7px;letter-spacing:.6px;color:var(--muted)}
+.personal-item-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}
+.personal-item-slot{min-width:0;min-height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:#13232e;border:1px dashed #354b58}
+.personal-item-slot strong{max-width:100%;overflow:hidden;text-overflow:ellipsis;font-size:7px;color:#c5d5dc}
+@media(max-width:850px){.body-suit-columns{grid-template-columns:1fr}.personal-loadout{grid-template-columns:1fr}.personal-item-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:560px){.part-list{grid-template-columns:1fr}.weapon-loadout{grid-template-columns:1fr}.loadout-column>header{align-items:flex-start;flex-direction:column}.loadout-column>header>b{text-align:left}}
