@@ -19,6 +19,7 @@ export function createExpeditionSuitParts() {
         hp: maxHp,
         maxHp,
         status: null,
+        module: null,
       },
     ])
   );
