@@ -263,6 +263,9 @@ export class InputController {
   syncInfoModal(pawn) {
     const values = {
       "#info-title": pawn.name.toUpperCase(),
+      "#info-id": pawn.id.toUpperCase(),
+      "#info-initial": pawn.name.slice(0, 1).toUpperCase(),
+      "#info-unit-status": pawn.drafted ? "DRAFTED" : "AUTONOMOUS",
       "#info-age": `${pawn.age} YEARS`,
       "#info-birthday": `DAY ${String(pawn.birthdayDay).padStart(3, "0")}`,
       "#info-health": `${pawn.health} / ${pawn.maxHealth}`,
@@ -276,6 +279,10 @@ export class InputController {
       const node = document.querySelector(selector);
       if (node) node.textContent = value;
     }
+    const healthBar = document.querySelector("#info-health-bar");
+    const staminaBar = document.querySelector("#info-stamina-bar");
+    if (healthBar) healthBar.style.width = `${Math.max(0, Math.min(100, pawn.health / pawn.maxHealth * 100))}%`;
+    if (staminaBar) staminaBar.style.width = `${Math.max(0, Math.min(100, pawn.stamina / pawn.maxStamina * 100))}%`;
   }
 
   syncDraftUI() {
