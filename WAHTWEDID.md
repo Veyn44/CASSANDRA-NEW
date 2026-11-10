@@ -16,3 +16,8 @@ Stručný vývojový deník CASSANDRA-NEW. Zachycuje nejen změny v kódu, ale t
   - Každá ze šesti anatomických částí obleku má právě jeden modulový slot. Konkrétní moduly a jejich účinky zatím nejsou součástí implementace.
 - **Hranice implementace:** stanice má zatím datový model a správu; není ještě umístěna/renderována jako stavba ve světě a nemá UI. Smrt/loot zatím nejsou napojeny na herní combat/death flow. Nový model obleku zatím nenahrazuje starý pawn health systém.
 - **Ověření:** změny byly zapsány do GitHubu. Runtime/browser test nebyl proveden.
+
+### 2026-11-10 — Explicit module slots
+- **Implementační commit:** [90e71d676957afe4f9c9ad53acbc5321e848a2aa](https://github.com/Veyn44/CASSANDRA-NEW/commit/90e71d676957afe4f9c9ad53acbc5321e848a2aa)
+- **Kód:** každá ze šesti částí obleku nyní obsahuje vlastní prázdný slot `module`.
+- **Ideologie:** slot je součástí anatomické části obleku, ne samostatným inventářem stanice nebo pawna. Jeden slot na část; obsah a účinky modulů budou definovány později.
