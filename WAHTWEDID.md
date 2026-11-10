@@ -64,3 +64,8 @@ Stručný vývojový deník CASSANDRA-NEW. Zachycuje nejen změny v kódu, ale t
 - **Herní pravidlo:** SET DAY mění pouze kalendářní den a nikdy věk. END DAY posune den (včetně přechodu 365 → 1 a zvýšení roku) a poté jednou vyhodnotí narozeniny všech pawnů. Věk se zvýší pouze tehdy, když nově nastavený den odpovídá birthdayDay. Reálný čas, rychlost simulace ani načtení hry věk nemění.
 - **Hranice implementace:** věk a narozeniny jsou nyní součástí runtime dat pawnů a zobrazují se v personnel info. Repo zatím nemá implementovaný save/load systém, takže persistence přes restart hry není součástí této změny. Ostatní systémy stárnutí ani efekty věku nebyly přidány.
 - **Ověření:** změny zapsány do GitHubu. Runtime/browser test nebyl proveden.
+### 2026-11-10 — Full Unit Details: BIO profile
+- **Implementační commity:** [303374a — expanded personnel BIO markup](https://github.com/Veyn44/CASSANDRA-NEW/commit/303374a9766b23650163f38d3d0426993802680f), [250e6a5 — live pawn data binding](https://github.com/Veyn44/CASSANDRA-NEW/commit/250e6a59a2e633b6ef273ef86fa71883619220e8), [12ad46a — BIO profile styling](https://github.com/Veyn44/CASSANDRA-NEW/commit/12ad46a79f3415ca103c844e3a70f23cf276e0c5).
+- **Kód:** původní malé INFO okno bylo rozšířeno na velký personnel BIO profil s identifikačním panelem, osobními údaji, prostorem pro budoucí biografii a živým přehledem stavu.
+- **Hranice:** implementována pouze obrazovka BIO. BODY, Expedition Suit, Equipment, Conditions a History zůstávají mimo tento krok; neznámý původ a biografie se zobrazují jako nezadané, nevymýšlí se.
+- **Ověření:** změny zapsány do GitHubu; runtime/browser test nebyl proveden.
