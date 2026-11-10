@@ -1,6 +1,7 @@
 import { BODY_PART_BASE_HP } from "../physical/body-parts.js";
 
-// Each expedition-suit section starts at exactly half the matching body-part HP.
+// Suit protection has a fixed 50% of the matching base anatomy HP.
+// Suit HP is independent and is never recalculated from current body-part HP.
 export const EXPEDITION_SUIT_PART_BASE_HP = Object.freeze(
   Object.fromEntries(
     Object.entries(BODY_PART_BASE_HP).map(([part, hp]) => [part, hp / 2])
