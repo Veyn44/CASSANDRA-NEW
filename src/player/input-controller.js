@@ -15,6 +15,7 @@ export class InputController {
     this.lastPointer = null;
     this.attackHeld = false;
     this.selectedPawnId = this.commander.id;
+    this.personnelTab = "bio";
     this.onKeyDown = (event) => this.handleKeyDown(event);
     this.onKeyUp = (event) => this.keys.delete(event.key.toLowerCase());
     this.onWheel = (event) => {
@@ -63,6 +64,7 @@ export class InputController {
     document.querySelector("#pawn-info-button").addEventListener("click", () => {
       const pawn = this.pawns.find((item) => item.id === this.selectedPawnId) || this.commander;
       this.syncInfoModal(pawn);
+      this.setPersonnelTab("bio");
       document.querySelector("#pawn-info-modal").hidden = false;
     });
     document.querySelectorAll("[data-close-modal]").forEach((button) => button.addEventListener("click", () => {
@@ -71,6 +73,9 @@ export class InputController {
     document.querySelector("#settings-modal").addEventListener("click", (event) => {
       if (event.target.id === "settings-modal") event.currentTarget.hidden = true;
     });
+    document.querySelectorAll("[data-personnel-tab]").forEach((button) => button.addEventListener("click", () => {
+      this.setPersonnelTab(button.dataset.personnelTab);
+    }));
     document.querySelector("#pawn-info-modal").addEventListener("click", (event) => {
       if (event.target.id === "pawn-info-modal") event.currentTarget.hidden = true;
     });
@@ -260,6 +265,21 @@ export class InputController {
     document.querySelectorAll(".crew-card[data-pawn-id]").forEach((card) => card.classList.toggle("selected-pawn", card.dataset.pawnId === pawn.id));
   }
 
+  setPersonnelTab(tab) {
+    if (!["bio", "gear"].includes(tab)) return;
+    this.personnelTab = tab;
+    document.querySelectorAll("[data-personnel-tab]").forEach((button) => {
+      const active = button.dataset.personnelTab === tab;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-selected", String(active));
+    });
+    document.querySelectorAll("[data-personnel-content]").forEach((panel) => {
+      panel.hidden = panel.dataset.personnelContent !== tab;
+    });
+    const label = document.querySelector("#personnel-view-label");
+    if (label) label.textContent = `PROFILE VIEW · ${tab.toUpperCase()}`;
+  }
+
   syncInfoModal(pawn) {
     const values = {
       "#info-title": pawn.name.toUpperCase(),
@@ -273,7 +293,10 @@ export class InputController {
       "#info-carry": `${pawn.carriedWeight} / ${pawn.carryCapacity} kg`,
       "#info-weapon": pawn.weapon?.name || "UNARMED",
       "#info-order": pawn.commandOrder.toUpperCase(),
-      "#info-position": `${pawn.x.toFixed(2)}, ${pawn.y.toFixed(2)}`
+      "#info-position": `${pawn.x.toFixed(2)}, ${pawn.y.toFixed(2)}`,
+      "#gear-weapon": pawn.weapon?.name || "UNARMED",
+      "#gear-suit": pawn.expeditionSuit ? "EQUIPPED" : "NOT EQUIPPED",
+      "#gear-suit-detail": pawn.expeditionSuit ? "Expedition suit assigned to this unit" : "No suit assigned to this unit"
     };
     for (const [selector, value] of Object.entries(values)) {
       const node = document.querySelector(selector);
