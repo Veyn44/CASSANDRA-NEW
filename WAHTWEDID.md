@@ -96,7 +96,13 @@ Stručný vývojový deník CASSANDRA-NEW. Zachycuje nejen změny v kódu, ale t
 
 ### 2026-11-10 — Pawn professions foundation
 - **Implementační commity:**
-  - profesní definice a progression: doplnit SHA po dokončení zápisu.
+  - [ecace22 — profession definitions](https://github.com/Veyn44/CASSANDRA-NEW/commit/ecace22171fbcdcffd10716549aff6f457de85f7)
+  - [d228bb2 — profession progression](https://github.com/Veyn44/CASSANDRA-NEW/commit/d228bb2d8f52fc522803a43efc1f4b9f838016d4)
+  - [044dc2f — crew profession initialization](https://github.com/Veyn44/CASSANDRA-NEW/commit/044dc2f9f0aa62ffe8821ca0aea139a4010272f8)
+  - [b451512 — commander profession initialization](https://github.com/Veyn44/CASSANDRA-NEW/commit/b451512476863ea4e0266f331a3ae40a34acdc93)
+  - [b64b550 — WHATTODO profession model](https://github.com/Veyn44/CASSANDRA-NEW/commit/b64b550c2a4b3f4cf2dbaf89a14e42429aff477a)
+  - [7fd1303 — WAHTWEDID entry](https://github.com/Veyn44/CASSANDRA-NEW/commit/7fd130389c7bd0106aa3345c7585793191643c8d)
+  - [
 - **Kód:** připraven katalog devíti profesních tagů (Mining, Engineering, Material Science, Technician, Science, Fabrication, Soldier, Medicine, Operator), výchozí profesní progression pro Commander i crew Pawny a pomocné funkce pro XP, level, efficiency a AP.
 - **Výchozí stav profese:** Level 1, XP 0/100, base AP 1, masteryStars 0. Každých 100 XP zvyšuje level, přebytečné XP se přenášejí, maximum je Level 30. Efficiency je odvozena jako 10 % za Level (Level 1 = 10 %, Level 30 = 300 %). AP se počítá odděleně jako base AP + mastery stars.
 - **Herní důvod:** všechny pracovní úkony budou mít právě jeden profesní tag; XP rozvíjí pouze odpovídající profesi. Operator sjednocuje budoucí hauling/transport/transportní robotiku; Pilot zatím není samostatná profese.
