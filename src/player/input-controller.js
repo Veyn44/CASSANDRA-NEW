@@ -1,3 +1,5 @@
+import { endStrategicDay, setStrategicDay } from "../core/strategic-calendar.js";
+
 export class InputController {
   constructor(canvas, pawns, camera, clock, renderer, calendar) {
     this.canvas = canvas;
@@ -155,32 +157,20 @@ export class InputController {
       input.value = String(this.calendar.day);
       return;
     }
-    this.calendar.day = nextDay;
+    setStrategicDay(this.calendar, nextDay);
     this.showToast(`CALENDAR SET TO DAY ${String(nextDay).padStart(3, "0")} · AGE UNCHANGED`);
   }
 
   endDayFromDevTools() {
     if (!this.devMode) return;
-    if (this.calendar.day === 365) {
-      this.calendar.day = 1;
-      this.calendar.year += 1;
-    } else {
-      this.calendar.day += 1;
-    }
-    const aged = [];
-    for (const pawn of this.pawns) {
-      if (pawn.birthdayDay === this.calendar.day) {
-        pawn.age += 1;
-        aged.push(pawn.name);
-      }
-    }
+    const { day, agedPawns } = endStrategicDay(this.calendar, this.pawns);
     document.querySelector("#dev-day-input").value = String(this.calendar.day);
     for (const pawn of this.pawns) {
       if (pawn.id === this.selectedPawnId) this.syncInfoModal(pawn);
     }
-    this.showToast(aged.length
-      ? `END DAY · BIRTHDAY: ${aged.join(", ")}`
-      : `END DAY · DAY ${String(this.calendar.day).padStart(3, "0")}`);
+    this.showToast(agedPawns.length
+      ? `END DAY · BIRTHDAY: ${agedPawns.map((pawn) => pawn.name).join(", ")}`
+      : `END DAY · DAY ${String(day).padStart(3, "0")}`);
   }
 
   showToast(message) {
