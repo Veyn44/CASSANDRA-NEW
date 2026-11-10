@@ -1,11 +1,16 @@
 import { moveEntity } from "../../navigation/movement.js";
 import { createPawnIdentity } from "./identity/identity.js";
+import { createBodyParts, PAWN_BASE_MAX_HP } from "./physical/body-parts.js";
 
 export function createCrewMember({ id, name, x, y, color = "#e6b95f", age, birthdayDay }) {
   return {
     id,
     ...createPawnIdentity({ name, age, birthdayDay }),
-    x, y, color,
+    x, y,
+    bodyParts: createBodyParts(),
+    secondaryWeapon: null,
+    utilityItem: null,
+    personalItems: Array.from({ length: 6 }, (_, index) => ({ slot: index + 1, item: null })), color,
     radius: 0.28,
     speed: 3.8,
     rotation: Math.PI / 2,
@@ -14,8 +19,8 @@ export function createCrewMember({ id, name, x, y, color = "#e6b95f", age, birth
     velocityY: 0,
     isMoving: false,
     drafted: false,
-    health: 100,
-    maxHealth: 100,
+    health: PAWN_BASE_MAX_HP,
+    maxHealth: PAWN_BASE_MAX_HP,
     stamina: 100,
     maxStamina: 100,
     carryCapacity: 30,
