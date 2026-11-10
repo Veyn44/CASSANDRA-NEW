@@ -13,6 +13,10 @@ export class InputController {
     this.selectedPawnId = this.commander.id;
     this.onKeyDown = (event) => this.handleKeyDown(event);
     this.onKeyUp = (event) => this.keys.delete(event.key.toLowerCase());
+    this.onWheel = (event) => {
+      event.preventDefault();
+      this.camera.setZoom(this.camera.zoom * (event.deltaY < 0 ? 1.1 : 0.9));
+    };
     this.onPointerDown = (event) => {
       if (event.button === 1) {
         this.dragging = true;
@@ -46,6 +50,7 @@ export class InputController {
 
     window.addEventListener("keydown", this.onKeyDown);
     window.addEventListener("keyup", this.onKeyUp);
+    canvas.addEventListener("wheel", this.onWheel, { passive: false });
     canvas.addEventListener("pointerdown", this.onPointerDown);
     window.addEventListener("pointermove", this.onPointerMove);
     window.addEventListener("pointerup", this.onPointerUp);
@@ -202,6 +207,7 @@ export class InputController {
   destroy() {
     window.removeEventListener("keydown", this.onKeyDown);
     window.removeEventListener("keyup", this.onKeyUp);
+    this.canvas.removeEventListener("wheel", this.onWheel);
     this.canvas.removeEventListener("pointerdown", this.onPointerDown);
     window.removeEventListener("pointermove", this.onPointerMove);
     window.removeEventListener("pointerup", this.onPointerUp);
