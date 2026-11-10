@@ -1,4 +1,6 @@
 import { endStrategicDay, setStrategicDay } from "../core/strategic-calendar.js";
+import { PROFESSION_DEFINITIONS, PROFESSION_IDS } from "../entities/pawns/professions/definitions.js";
+import { getProfessionAP, getProfessionEfficiency } from "../entities/pawns/professions/progression.js";
 
 export class InputController {
   constructor(canvas, pawns, camera, clock, renderer, calendar) {
@@ -266,7 +268,7 @@ export class InputController {
   }
 
   setPersonnelTab(tab) {
-    if (!["bio", "gear"].includes(tab)) return;
+    if (!["bio", "gear", "professions"].includes(tab)) return;
     this.personnelTab = tab;
     document.querySelectorAll("[data-personnel-tab]").forEach((button) => {
       const active = button.dataset.personnelTab === tab;
@@ -278,8 +280,37 @@ export class InputController {
     });
     const label = document.querySelector("#personnel-view-label");
     if (label) label.textContent = `PROFILE VIEW · ${tab.toUpperCase()}`;
+    const pawn = this.pawns.find((item) => item.id === this.selectedPawnId) || this.commander;
+    if (tab === "professions") this.syncProfessionUI(pawn);
   }
 
+  syncProfessionUI(pawn) {
+    const container = document.querySelector("#profession-list");
+    if (!container) return;
+    container.replaceChildren();
+    for (const professionId of PROFESSION_IDS) {
+      const profession = pawn.professions?.[professionId];
+      const definition = PROFESSION_DEFINITIONS[professionId];
+      if (!profession || !definition) continue;
+      const xpRequired = profession.xpToNextLevel || 100 * Math.max(1, profession.masteryStars || 1);
+      const xp = Math.min(profession.xp || 0, xpRequired);
+      const progress = Math.max(0, Math.min(100, xp / xpRequired * 100));
+      const efficiency = Math.round(getProfessionEfficiency(profession) * 100);
+      const ap = getProfessionAP(profession);
+      const card = document.createElement("article");
+      card.className = "profession-card";
+      card.innerHTML = '<div class="profession-card-head"><strong></strong><span class="profession-level"></span></div><div class="profession-xp-row"><span>EXPERIENCE</span><strong></strong></div><div class="profession-xp-track"><i></i></div><div class="profession-card-meta"><span>EFFICIENCY <strong></strong></span><span>AP <strong></strong></span><span class="profession-stars"></span></div>';
+      card.querySelector(".profession-card-head strong").textContent = definition.name;
+      card.querySelector(".profession-level").textContent = `LEVEL ${String(profession.level).padStart(2, "0")}`;
+      card.querySelector(".profession-xp-row strong").textContent = `${xp} / ${xpRequired} XP`;
+      card.querySelector(".profession-xp-track i").style.width = `${progress}%`;
+      const meta = card.querySelectorAll(".profession-card-meta span");
+      meta[0].querySelector("strong").textContent = `+ ${efficiency}%`;
+      meta[1].querySelector("strong").textContent = String(ap);
+      meta[2].textContent = `★ × ${profession.masteryStars}`;
+      container.append(card);
+    }
+  }
   syncInfoModal(pawn) {
     const values = {
       "#info-title": pawn.name.toUpperCase(),
@@ -301,6 +332,7 @@ export class InputController {
       "#gear-suit-detail": pawn.expeditionSuit ? "PROTECTIVE LAYER · 50% BASE HP" : "NO SUIT ASSIGNED",
       "#body-total-hp": `${Object.values(pawn.bodyParts || {}).reduce((sum, part) => sum + part.hp, 0)} / ${Object.values(pawn.bodyParts || {}).reduce((sum, part) => sum + part.maxHp, 0)} HP`
     };
+    if (this.personnelTab === "professions") this.syncProfessionUI(pawn);
     for (const [selector, value] of Object.entries(values)) {
       const node = document.querySelector(selector);
       if (node) node.textContent = value;
