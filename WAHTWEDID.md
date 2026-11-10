@@ -50,3 +50,17 @@ Stručný vývojový deník CASSANDRA-NEW. Zachycuje nejen změny v kódu, ale t
 - **Implementační commity:** [0db8fc7 — remove control hints](https://github.com/Veyn44/CASSANDRA-NEW/commit/0db8fc7749bb45b647accc24e33c49d6e14c7008), [7479b75 — hide left scrollbar](https://github.com/Veyn44/CASSANDRA-NEW/commit/7479b7578caac1b44eca9d4de12840b0c93fb88a)
 - **Kód:** odstraněna sekce CONTROL s klávesovými nápovědami; karta pawna a DRAFT ON/OFF zůstávají. Scrollbar levého panelu je skrytý.
 - **Ověření:** změny zapsány do GitHubu; runtime/browser test této úpravy zatím neproveden.
+### 2026-11-10 — Pawn birthdays and developer day controls
+- **Implementační commity:**
+  - [2cae611 — pawn identity age and birthday](https://github.com/Veyn44/CASSANDRA-NEW/commit/2cae611c0554c5d8be61cdfe6099ba5e75f24052)
+  - [4b5bfee — strategic calendar](https://github.com/Veyn44/CASSANDRA-NEW/commit/4b5bfee59c872ec9a37e153e52af7ba26753a161)
+  - [77dd127 — commander identity integration](https://github.com/Veyn44/CASSANDRA-NEW/commit/77dd1271df37c3e8d673ea18287322904dddcfdb)
+  - [14a21b6 — crew identity integration](https://github.com/Veyn44/CASSANDRA-NEW/commit/14a21b661a272239a4b5cbaf78db5afea89e8439)
+  - [8034762 — game calendar integration](https://github.com/Veyn44/CASSANDRA-NEW/commit/8034762119e7b2e291e05947953f12868e8e3a8f)
+  - [23ccd30 — calendar and dev controls UI](https://github.com/Veyn44/CASSANDRA-NEW/commit/23ccd308a02c15ca8c949b533c850983848f44c9)
+  - [a604180 — dev controls styling](https://github.com/Veyn44/CASSANDRA-NEW/commit/a604180d975f24311feda2a73d7e6aa7b3defb80)
+  - [a9527c0 — shared END DAY transition](https://github.com/Veyn44/CASSANDRA-NEW/commit/a9527c0df1fea56dabf69bf3bf2ae281a3998b80)
+- **Kód:** každý pawn dostává počáteční věk 18–50 let a narozeninový den 1–365. Strategický kalendář začíná dnem 1 roku 2084 a zobrazuje se v horní liště. ESC menu obsahuje DEV MODE ON/OFF; po zapnutí zpřístupní SET DAY a END DAY.
+- **Herní pravidlo:** SET DAY mění pouze kalendářní den a nikdy věk. END DAY posune den (včetně přechodu 365 → 1 a zvýšení roku) a poté jednou vyhodnotí narozeniny všech pawnů. Věk se zvýší pouze tehdy, když nově nastavený den odpovídá birthdayDay. Reálný čas, rychlost simulace ani načtení hry věk nemění.
+- **Hranice implementace:** věk a narozeniny jsou nyní součástí runtime dat pawnů a zobrazují se v personnel info. Repo zatím nemá implementovaný save/load systém, takže persistence přes restart hry není součástí této změny. Ostatní systémy stárnutí ani efekty věku nebyly přidány.
+- **Ověření:** změny zapsány do GitHubu. Runtime/browser test nebyl proveden.
