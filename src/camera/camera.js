@@ -5,15 +5,11 @@ export class Camera {
     this.zoom = 1;
     this.targetX = this.x;
     this.targetY = this.y;
-    this.panX = 0;
-    this.panY = 0;
+    this.manual = false;
   }
 
   follow(target, delta) {
-    if (this.panX || this.panY) {
-      this.targetX += this.panX * delta;
-      this.targetY += this.panY * delta;
-    } else {
+    if (!this.manual) {
       this.targetX = target.x;
       this.targetY = target.y;
     }
@@ -26,10 +22,18 @@ export class Camera {
     this.zoom = Math.max(0.55, Math.min(2.2, value));
   }
 
+  panByScreenDelta(deltaX, deltaY, tileSize) {
+    const scale = tileSize * this.zoom;
+    this.manual = true;
+    this.targetX -= deltaX / scale;
+    this.targetY -= deltaY / scale;
+    this.x = this.targetX;
+    this.y = this.targetY;
+  }
+
   centerOn(target) {
+    this.manual = false;
     this.targetX = target.x;
     this.targetY = target.y;
-    this.panX = 0;
-    this.panY = 0;
   }
 }
