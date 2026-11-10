@@ -92,3 +92,13 @@ Stručný vývojový deník CASSANDRA-NEW. Zachycuje nejen změny v kódu, ale t
 - **Kód:** crew pawn model nyní explicitně obsahuje `expeditionSuit` a `expeditionSuitStationId`. Mira při vytvoření nové hry dostane vlastní Basic Expedition Suit přes existující suit factory; oblek je ve stavu `equipped` a jeho umístění ukazuje na Miru.
 - **Herní důvod:** Mira slouží jako první target dummy pro budoucí testování zbraní, zásahů, poškození obleku a anatomie.
 - **Hranice:** jde pouze o přiřazení existujícího obleku. Damage System, armor hodnoty, zbraňové balancování a runtime test nebyly součástí této změny.
+
+
+### 2026-11-10 — Pawn professions foundation
+- **Implementační commity:**
+  - profesní definice a progression: doplnit SHA po dokončení zápisu.
+- **Kód:** připraven katalog devíti profesních tagů (Mining, Engineering, Material Science, Technician, Science, Fabrication, Soldier, Medicine, Operator), výchozí profesní progression pro Commander i crew Pawny a pomocné funkce pro XP, level, efficiency a AP.
+- **Výchozí stav profese:** Level 1, XP 0/100, base AP 1, masteryStars 0. Každých 100 XP zvyšuje level, přebytečné XP se přenášejí, maximum je Level 30. Efficiency je odvozena jako 10 % za Level (Level 1 = 10 %, Level 30 = 300 %). AP se počítá odděleně jako base AP + mastery stars.
+- **Herní důvod:** všechny pracovní úkony budou mít právě jeden profesní tag; XP rozvíjí pouze odpovídající profesi. Operator sjednocuje budoucí hauling/transport/transportní robotiku; Pilot zatím není samostatná profese.
+- **Hranice implementace:** nepřidávají se konkrétní pracovní akce, XP odměny, denní AP reset/spotřeba, náhodné mastery, celkový Pawn level, UI ani AI. Carry capacity se tímto commitem nemění.
+- **Ověření:** změny zapsány do GitHubu; runtime/browser test nebyl proveden.
