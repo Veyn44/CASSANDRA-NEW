@@ -41,7 +41,8 @@ export class Renderer {
     this.drawGrid(ctx, left, top, right, bottom, tile, width, height);
     this.drawModules(ctx, left, top, tile);
     for (const pawn of this.pawns) this.drawPawn(ctx, left, top, tile, elapsed, pawn);
-    this.drawAmbientDetails(ctx, left, top, right, bottom, tile, elapsed);\n    if (paused) this.drawPauseFrame(ctx, realTime);
+    this.drawAmbientDetails(ctx, left, top, right, bottom, tile, elapsed);
+    if (paused) this.drawPauseFrame(ctx, realTime);
   }
 
   drawTerrain(ctx, left, top, right, bottom, tile) {
