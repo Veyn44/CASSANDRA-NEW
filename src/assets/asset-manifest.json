@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "pixelScale": {
+    "worldPixelsPerTile": 32,
+    "sourceArtScale": 1
+  },
+  "assets": {
+    "commander": {
+      "type": "sprite",
+      "src": "/assets/sprites/commander.png",
+      "fallback": "commander-placeholder"
+    },
+    "habitat_module": {
+      "type": "sprite",
+      "src": "/assets/sprites/habitat-module.png",
+      "fallback": "module-placeholder"
+    }
+  },
+  "animations": {}
+}
