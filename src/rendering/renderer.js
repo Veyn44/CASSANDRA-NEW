@@ -24,7 +24,7 @@ export class Renderer {
     this.context.setTransform(ratio, 0, 0, ratio, 0, 0);
   }
 
-  render(elapsed = 0, paused = false) {
+  render(elapsed = 0, paused = false, realTime = elapsed) {
     const ctx = this.context;
     const width = this.width;
     const height = this.height;
@@ -41,7 +41,7 @@ export class Renderer {
     this.drawGrid(ctx, left, top, right, bottom, tile, width, height);
     this.drawModules(ctx, left, top, tile);
     for (const pawn of this.pawns) this.drawPawn(ctx, left, top, tile, elapsed, pawn);
-    this.drawAmbientDetails(ctx, left, top, right, bottom, tile, elapsed);\n    if (paused) this.drawPauseFrame(ctx, elapsed);
+    this.drawAmbientDetails(ctx, left, top, right, bottom, tile, elapsed);\n    if (paused) this.drawPauseFrame(ctx, realTime);
   }
 
   drawTerrain(ctx, left, top, right, bottom, tile) {
