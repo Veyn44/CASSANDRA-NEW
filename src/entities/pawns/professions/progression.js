@@ -1,5 +1,4 @@
 import {
-  PROFESSION_BASE_AP,
   PROFESSION_AP_PER_MASTERY_STAR,
   PROFESSION_EFFICIENCY_PER_LEVEL,
   PROFESSION_IDS,
@@ -14,9 +13,8 @@ export function createProfessionProgression() {
       {
         level: 1,
         xp: 0,
+        masteryStars: 1,
         xpToNextLevel: PROFESSION_XP_PER_LEVEL,
-        masteryStars: 0,
-        baseAP: PROFESSION_BASE_AP,
       },
     ])
   );
@@ -29,7 +27,7 @@ export function getProfessionEfficiency(profession) {
 
 export function getProfessionAP(profession) {
   if (!profession) return 0;
-  return profession.baseAP + profession.masteryStars * PROFESSION_AP_PER_MASTERY_STAR;
+  return profession.masteryStars * PROFESSION_AP_PER_MASTERY_STAR;
 }
 
 export function addProfessionXP(professions, professionId, amount) {
@@ -52,6 +50,7 @@ export function addProfessionXP(professions, professionId, amount) {
       remainingXP -= neededXP;
       nextProfession.level += 1;
       nextProfession.xp = 0;
+      nextProfession.xpToNextLevel = PROFESSION_XP_PER_LEVEL * Math.max(1, nextProfession.masteryStars);
       levelsGained += 1;
     }
   }
