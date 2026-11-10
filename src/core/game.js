@@ -27,14 +27,16 @@ export function createGame({ canvas }) {
 
     input.update(delta);
     commander.update(delta, world);
-    camera.follow(commander, delta);
+    camera.follow(commander, delta, commander.drafted);
     renderer.render(elapsed, clock.paused);
 
     document.querySelector("#clock-readout").textContent = formatClock(elapsed);
     document.querySelector("#coords-readout").textContent =
       `X ${String(Math.floor(commander.x)).padStart(3, "0")} · Y ${String(Math.floor(commander.y)).padStart(3, "0")}`;
     document.querySelector("#camera-readout").textContent = `ZOOM ${Math.round(camera.zoom * 100)}%`;
-    document.querySelector("#unit-state").textContent = clock.paused ? "PAUSED" : commander.isMoving ? "MOVING" : "READY";
+    document.querySelector("#unit-state").textContent = commander.drafted
+      ? (commander.isMoving ? "DRAFTED · MOVING" : "DRAFTED")
+      : "AUTONOMOUS";
 
     frameId = requestAnimationFrame(frame);
   }
