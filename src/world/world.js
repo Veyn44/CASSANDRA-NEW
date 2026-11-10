@@ -21,14 +21,27 @@ export function createWorld() {
   return {
     width: WIDTH, height: HEIGHT, blocked, modules,
     isBlocked(x, y) {
-      const col = Math.floor(x);
-      const row = Math.floor(y);
-      if (col < 0 || row < 0 || col >= WIDTH || row >= HEIGHT) return true;
-      if (blocked.has(key(col, row))) return true;
-      return modules.some((module) =>
-        col >= module.x && col < module.x + module.width &&
-        row >= module.y && row < module.y + module.height
-      );
+      return this.isCircleBlocked(x, y, 0);
+    },
+    isCircleBlocked(x, y, radius) {
+      if (x - radius < 0 || y - radius < 0 || x + radius > WIDTH || y + radius > HEIGHT) return true;
+      const minX = Math.floor(x - radius);
+      const maxX = Math.floor(x + radius);
+      const minY = Math.floor(y - radius);
+      const maxY = Math.floor(y + radius);
+      for (let row = minY; row <= maxY; row += 1) {
+        for (let col = minX; col <= maxX; col += 1) {
+          const blockedTile = blocked.has(key(col, row)) || modules.some((module) =>
+            col >= module.x && col < module.x + module.width &&
+            row >= module.y && row < module.y + module.height
+          );
+          if (!blockedTile) continue;
+          const nearestX = Math.max(col, Math.min(x, col + 1));
+          const nearestY = Math.max(row, Math.min(y, row + 1));
+          if ((x - nearestX) ** 2 + (y - nearestY) ** 2 < radius ** 2) return true;
+        }
+      }
+      return false;
     },
   };
 }
