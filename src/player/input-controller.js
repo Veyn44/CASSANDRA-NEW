@@ -295,8 +295,11 @@ export class InputController {
       "#info-order": pawn.commandOrder.toUpperCase(),
       "#info-position": `${pawn.x.toFixed(2)}, ${pawn.y.toFixed(2)}`,
       "#gear-weapon": pawn.weapon?.name || "UNARMED",
-      "#gear-suit": pawn.expeditionSuit ? "EQUIPPED" : "NOT EQUIPPED",
-      "#gear-suit-detail": pawn.expeditionSuit ? "Expedition suit assigned to this unit" : "No suit assigned to this unit"
+      "#gear-secondary-weapon": pawn.secondaryWeapon?.name || "EMPTY",
+      "#utility-item-name": pawn.utilityItem?.name || "EMPTY",
+      "#gear-suit": pawn.expeditionSuit ? `EQUIPPED · ${pawn.expeditionSuit.currentHp} HP` : "NOT EQUIPPED",
+      "#gear-suit-detail": pawn.expeditionSuit ? "PROTECTIVE LAYER · 50% BASE HP" : "NO SUIT ASSIGNED",
+      "#body-total-hp": `${Object.values(pawn.bodyParts || {}).reduce((sum, part) => sum + part.hp, 0)} / ${Object.values(pawn.bodyParts || {}).reduce((sum, part) => sum + part.maxHp, 0)} HP`
     };
     for (const [selector, value] of Object.entries(values)) {
       const node = document.querySelector(selector);
@@ -306,6 +309,31 @@ export class InputController {
     const staminaBar = document.querySelector("#info-stamina-bar");
     if (healthBar) healthBar.style.width = `${Math.max(0, Math.min(100, pawn.health / pawn.maxHealth * 100))}%`;
     if (staminaBar) staminaBar.style.width = `${Math.max(0, Math.min(100, pawn.stamina / pawn.maxStamina * 100))}%`;
+    const partLabels = { head: "HEAD", torso: "TORSO", leftArm: "LEFT ARM", rightArm: "RIGHT ARM", leftLeg: "LEFT LEG", rightLeg: "RIGHT LEG" };
+    for (const partId of Object.keys(partLabels)) {
+      const bodyPart = pawn.bodyParts?.[partId];
+      const suitPart = pawn.expeditionSuit?.parts?.[partId];
+      const set = (selector, value) => { const node = document.querySelector(selector); if (node) node.textContent = value; };
+      if (bodyPart) {
+        set(`#body-hp-${partId}`, `${bodyPart.hp} / ${bodyPart.maxHp} HP`);
+        set(`#body-status-${partId}`, bodyPart.status || "NORMAL");
+        const bar = document.querySelector(`#body-bar-${partId}`);
+        if (bar) bar.style.width = `${Math.max(0, Math.min(100, bodyPart.hp / bodyPart.maxHp * 100))}%`;
+      }
+      set(`#suit-hp-${partId}`, suitPart ? `${suitPart.hp} / ${suitPart.maxHp} HP` : "0 / 0 HP");
+      set(`#suit-status-${partId}`, suitPart ? (suitPart.status || "SUIT INTEGRITY") : "NO SUIT PART");
+      const suitBar = document.querySelector(`#suit-bar-${partId}`);
+      if (suitBar) suitBar.style.width = suitPart ? `${Math.max(0, Math.min(100, suitPart.hp / suitPart.maxHp * 100))}%` : "0%";
+      const socket = document.querySelector(`#suit-socket-${partId}`);
+      if (socket) { socket.classList.toggle("socket-occupied", Boolean(suitPart?.module)); socket.title = suitPart?.module?.name || "One module socket"; }
+    }
+    for (let slot = 1; slot <= 6; slot += 1) {
+      const item = pawn.personalItems?.find((entry) => entry.slot === slot)?.item;
+      const node = document.querySelector(`#personal-item-${slot}`);
+      if (node) node.textContent = item?.name || "EMPTY";
+    }
+    const utilityNode = document.querySelector("#utility-item-name");
+    if (utilityNode) utilityNode.textContent = pawn.utilityItem?.name || "EMPTY";
   }
 
   syncDraftUI() {
