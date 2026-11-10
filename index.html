@@ -21,11 +21,18 @@
     <section class="game-layout">
       <aside class="left-rail">
         <div class="rail-heading"><span>COMMAND</span><span id="game-status" class="live-label">LIVE</span></div>
-        <article class="commander-card">
-          <div class="portrait"><span>V</span><i></i></div>
-          <div class="commander-info"><strong>COMMANDER</strong><small>Human · Level 01</small><div class="health-track"><span></span></div></div>
-          <span class="unit-state" id="unit-state">AUTONOMOUS</span>
-        </article>
+        <section class="pawn-status" aria-live="polite">
+          <div class="pawn-status-head">
+            <div class="portrait" id="selected-portrait"><span>C</span><i></i></div>
+            <div class="commander-info"><strong id="selected-name">COMMANDER</strong><small id="selected-role">Human · Level 01</small><span class="unit-state" id="unit-state">AUTONOMOUS</span></div>
+          </div>
+          <div class="pawn-stat"><div><span>HEALTH</span><strong id="selected-health">100 / 100</strong></div><div class="health-track"><span id="selected-health-bar"></span></div></div>
+          <div class="pawn-stat"><div><span>STAMINA</span><strong id="selected-stamina">100 / 100</strong></div><div class="health-track"><span id="selected-stamina-bar" class="stamina-fill"></span></div></div>
+          <div class="pawn-stat"><div><span>CARRY CAPACITY</span><strong id="selected-carry">0 / 30 kg</strong></div><div class="health-track"><span id="selected-carry-bar" class="carry-fill"></span></div></div>
+          <div class="pawn-weapon"><span class="weapon-icon">⌁</span><span><small>EQUIPPED WEAPON</small><strong id="selected-weapon">UNARMED</strong></span></div>
+          <div class="pawn-command-readout"><span>ORDER</span><strong id="selected-order">HOLD</strong></div>
+          <button id="pawn-info-button" class="info-button" type="button">INFO · FULL UNIT DETAILS</button>
+        </section>
         <div class="section-label">CONTROL</div>
         <button id="draft-button" class="draft-button" type="button" aria-pressed="false">DRAFT <span>OFF</span><kbd>F</kbd></button>
         <div class="control-hint"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><span>Move when drafted</span></div>
@@ -44,10 +51,44 @@
       </aside>
       <section class="viewport">
         <canvas id="game-canvas" aria-label="Top-down asteroid outpost game view"></canvas>
-        <div class="viewport-top"><div id="crew-command-bar" class="crew-command-bar"><article class="crew-card" data-pawn-id="commander"><div class="crew-identity"><span class="crew-avatar cyan">C</span><span><strong>COMMANDER</strong><small class="crew-order">HOLD</small></span></div><div class="crew-orders"><button data-pawn-id="commander" data-order="hold" title="Hold position">HOLD</button><button data-pawn-id="commander" data-order="follow" title="Follow">FOLLOW</button><button data-pawn-id="commander" data-order="move" title="Move">MOVE</button><button data-pawn-id="commander" data-order="guard" title="Guard">GUARD</button><button data-pawn-id="commander" data-order="attack" title="Attack">ATTACK</button><button data-pawn-id="commander" data-order="use" title="Use">USE</button><button data-pawn-id="commander" data-order="retreat" title="Retreat">RETREAT</button><button data-pawn-id="commander" data-order="assist" title="Assist">ASSIST</button></div></article><article class="crew-card" data-pawn-id="crew-02"><div class="crew-identity"><span class="crew-avatar yellow">M</span><span><strong>MIRA</strong><small class="crew-order">HOLD</small></span></div><div class="crew-orders"><button data-pawn-id="crew-02" data-order="hold" title="Hold position">HOLD</button><button data-pawn-id="crew-02" data-order="follow" title="Follow">FOLLOW</button><button data-pawn-id="crew-02" data-order="move" title="Move">MOVE</button><button data-pawn-id="crew-02" data-order="guard" title="Guard">GUARD</button><button data-pawn-id="crew-02" data-order="attack" title="Attack">ATTACK</button><button data-pawn-id="crew-02" data-order="use" title="Use">USE</button><button data-pawn-id="crew-02" data-order="retreat" title="Retreat">RETREAT</button><button data-pawn-id="crew-02" data-order="assist" title="Assist">ASSIST</button></div></article></div><div class="viewport-tools"><button id="grid-button" class="tool-button active">GRID <span>ON</span></button><button id="center-button" class="tool-button">CENTER <span>⌖</span></button></div></div>
+        <div class="viewport-top"><div id="crew-command-bar" class="crew-command-bar">
+          <article class="crew-card " data-pawn-id="commander">
+            <div class="crew-card-top"><span class="crew-avatar cyan">C</span><span class="crew-name">COMMANDER</span><span class="crew-weapon" title="Equipped weapon">⌁</span></div>
+            <div class="crew-bar health"><i></i></div><div class="crew-bar carry"><i></i></div>
+            <small class="crew-order">HOLD</small>
+            <div class="crew-orders"><button data-pawn-id="commander" data-order="hold" title="HOLD">HOLD</button><button data-pawn-id="commander" data-order="follow" title="FOLLOW">FOLLOW</button><button data-pawn-id="commander" data-order="work" title="WORK">WORK</button><button data-pawn-id="commander" data-order="scout" title="SCOUT">SCOUT</button></div>
+          </article><article class="crew-card " data-pawn-id="crew-02">
+            <div class="crew-card-top"><span class="crew-avatar yellow">M</span><span class="crew-name">MIRA</span><span class="crew-weapon" title="Equipped weapon">⌁</span></div>
+            <div class="crew-bar health"><i></i></div><div class="crew-bar carry"><i></i></div>
+            <small class="crew-order">HOLD</small>
+            <div class="crew-orders"><button data-pawn-id="crew-02" data-order="hold" title="HOLD">HOLD</button><button data-pawn-id="crew-02" data-order="follow" title="FOLLOW">FOLLOW</button><button data-pawn-id="crew-02" data-order="work" title="WORK">WORK</button><button data-pawn-id="crew-02" data-order="scout" title="SCOUT">SCOUT</button></div>
+          </article><article class="crew-card empty-slot" data-pawn-id="slot-03">
+            <div class="crew-card-top"><span class="crew-avatar empty">＋</span><span class="crew-name">OPEN SLOT</span><span class="crew-weapon" title="Equipped weapon">⌁</span></div>
+            <div class="crew-bar health"><i></i></div><div class="crew-bar carry"><i></i></div>
+            <small class="crew-order">HOLD</small>
+            <div class="crew-orders"><button data-pawn-id="slot-03" data-order="hold" title="HOLD">HOLD</button><button data-pawn-id="slot-03" data-order="follow" title="FOLLOW">FOLLOW</button><button data-pawn-id="slot-03" data-order="work" title="WORK">WORK</button><button data-pawn-id="slot-03" data-order="scout" title="SCOUT">SCOUT</button></div>
+          </article><article class="crew-card empty-slot" data-pawn-id="slot-04">
+            <div class="crew-card-top"><span class="crew-avatar empty">＋</span><span class="crew-name">OPEN SLOT</span><span class="crew-weapon" title="Equipped weapon">⌁</span></div>
+            <div class="crew-bar health"><i></i></div><div class="crew-bar carry"><i></i></div>
+            <small class="crew-order">HOLD</small>
+            <div class="crew-orders"><button data-pawn-id="slot-04" data-order="hold" title="HOLD">HOLD</button><button data-pawn-id="slot-04" data-order="follow" title="FOLLOW">FOLLOW</button><button data-pawn-id="slot-04" data-order="work" title="WORK">WORK</button><button data-pawn-id="slot-04" data-order="scout" title="SCOUT">SCOUT</button></div>
+          </article><article class="crew-card empty-slot" data-pawn-id="slot-05">
+            <div class="crew-card-top"><span class="crew-avatar empty">＋</span><span class="crew-name">OPEN SLOT</span><span class="crew-weapon" title="Equipped weapon">⌁</span></div>
+            <div class="crew-bar health"><i></i></div><div class="crew-bar carry"><i></i></div>
+            <small class="crew-order">HOLD</small>
+            <div class="crew-orders"><button data-pawn-id="slot-05" data-order="hold" title="HOLD">HOLD</button><button data-pawn-id="slot-05" data-order="follow" title="FOLLOW">FOLLOW</button><button data-pawn-id="slot-05" data-order="work" title="WORK">WORK</button><button data-pawn-id="slot-05" data-order="scout" title="SCOUT">SCOUT</button></div>
+          </article><article class="crew-card empty-slot" data-pawn-id="slot-06">
+            <div class="crew-card-top"><span class="crew-avatar empty">＋</span><span class="crew-name">OPEN SLOT</span><span class="crew-weapon" title="Equipped weapon">⌁</span></div>
+            <div class="crew-bar health"><i></i></div><div class="crew-bar carry"><i></i></div>
+            <small class="crew-order">HOLD</small>
+            <div class="crew-orders"><button data-pawn-id="slot-06" data-order="hold" title="HOLD">HOLD</button><button data-pawn-id="slot-06" data-order="follow" title="FOLLOW">FOLLOW</button><button data-pawn-id="slot-06" data-order="work" title="WORK">WORK</button><button data-pawn-id="slot-06" data-order="scout" title="SCOUT">SCOUT</button></div>
+          </article>
+        </div><div class="viewport-tools"><button id="grid-button" class="tool-button active">GRID <span>ON</span></button><button id="center-button" class="tool-button">CENTER <span>⌖</span></button></div></div>
         <div class="viewport-bottom"><span><i class="legend-dot commander-dot"></i> COMMANDER</span><span><i class="legend-dot base-dot"></i> OUTPOST MODULE</span><span id="camera-readout">ZOOM 100%</span></div>
         
         <div id="toast" class="toast" role="status" aria-live="polite"></div>
+        <section id="pawn-info-modal" class="modal-backdrop" hidden><div class="modal-panel"><header><div><small>PERSONNEL RECORD</small><h2 id="info-title">COMMANDER</h2></div><button class="modal-close" data-close-modal>×</button></header><div class="modal-grid"><div><span>HEALTH</span><strong id="info-health">100 / 100</strong></div><div><span>STAMINA</span><strong id="info-stamina">100 / 100</strong></div><div><span>CARRY CAPACITY</span><strong id="info-carry">0 / 30 kg</strong></div><div><span>WEAPON</span><strong id="info-weapon">UNARMED</strong></div><div><span>COMMAND</span><strong id="info-order">HOLD</strong></div><div><span>POSITION</span><strong id="info-position">24.50, 20.50</strong></div></div><p>ATTRIBUTES, ARMOR, INVENTORY AND GEAR WILL BE EXPANDED HERE.</p></div></section>
+        <section id="settings-modal" class="modal-backdrop" hidden><div class="modal-panel"><header><div><small>GAME MENU</small><h2>SETTINGS</h2></div><button class="modal-close" data-close-modal>×</button></header><div class="settings-links"><button>SETTINGS · COMING SOON</button><button>CONTROLS · WASD / LMB / R / E / Q / SPACE</button></div></div></section>
       </section>
       <aside class="right-rail">
         <div class="rail-heading"><span>OUTPOST STATUS</span><span class="status-pill">STABLE</span></div>
