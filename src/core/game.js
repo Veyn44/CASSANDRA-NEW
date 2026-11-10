@@ -18,10 +18,22 @@ export function createGame({ canvas }) {
   commander.expeditionSuit.state = "equipped";
   commander.expeditionSuit.location = { type: "pawn", pawnId: commander.id };
 
-  const crew = [
-    commander,
-    createCrewMember({ id: "crew-02", name: "Mira", x: 21.5, y: 24.5, color: "#e6b95f" }),
-  ];
+  const mira = createCrewMember({
+    id: "crew-02",
+    name: "Mira",
+    x: 21.5,
+    y: 24.5,
+    color: "#e6b95f",
+  });
+  // Mira is the initial target dummy for weapon and damage balance testing.
+  mira.expeditionSuit = createSuitForPawn(mira, {
+    id: "suit-mira-basic",
+    name: "Basic Expedition Suit",
+  });
+  mira.expeditionSuit.state = "equipped";
+  mira.expeditionSuit.location = { type: "pawn", pawnId: mira.id };
+
+  const crew = [commander, mira];
   const camera = new Camera();
   const renderer = new Renderer(canvas, world, crew, camera);
   const input = new InputController(canvas, crew, camera, clock, renderer, calendar);
