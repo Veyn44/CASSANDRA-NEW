@@ -102,3 +102,49 @@
 .dev-tools-panel>small{line-height:1.6;letter-spacing:0}
 #dev-mode-toggle[aria-pressed="true"]{border-color:#d5a96b;color:#e5c58d;background:#302719}
 @media(max-width:600px){.world-readout #calendar-readout{display:none}}
+
+
+/* Personnel BIO profile — first expanded Full Unit Details view. */
+.personnel-backdrop{padding:clamp(10px,2vw,28px);place-items:stretch}
+.personnel-panel{width:100%;height:100%;min-height:0;display:flex;flex-direction:column;padding:clamp(16px,2vw,28px);background:#0b151f;border:1px solid #42646b;box-shadow:0 24px 90px #000b;overflow:auto}
+.personnel-header{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:17px;border-bottom:1px solid var(--line)}
+.personnel-header small{font-size:9px;letter-spacing:1.5px;color:var(--cyan)}
+.personnel-header h2{margin:5px 0 2px;font:700 clamp(24px,3vw,34px) Rajdhani,sans-serif;letter-spacing:2px}
+.personnel-subtitle{font-size:9px;letter-spacing:1.2px;color:var(--muted)}
+.personnel-layout{display:grid;grid-template-columns:minmax(155px,210px) minmax(280px,1fr) minmax(190px,245px);gap:clamp(14px,2vw,26px);padding:22px 0;flex:1;min-height:0}
+.personnel-identity{padding:16px;background:linear-gradient(160deg,#132531,#0f1b25);border:1px solid #2c4652;display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+.personnel-portrait{width:100%;aspect-ratio:1.15;max-height:190px;display:grid;place-items:center;position:relative;background:radial-gradient(ellipse at 50% 38%,#315461,#172c37 65%,#101b25);border:1px solid #41616a;margin-bottom:17px}
+.personnel-portrait span{font:700 clamp(65px,8vw,100px) Rajdhani,sans-serif;color:#9bdad6;text-shadow:0 0 30px #65d6d155}
+.personnel-portrait i{position:absolute;right:10px;bottom:10px;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px #83c69a}
+.personnel-id-label{font-size:8px;letter-spacing:1px;color:var(--muted);margin-bottom:6px}
+.personnel-identity>strong{font:700 15px Rajdhani,sans-serif;letter-spacing:1px;overflow-wrap:anywhere}
+.personnel-divider{height:1px;width:100%;background:var(--line);margin:15px 0}
+.personnel-mini-stat{width:100%;display:flex;flex-direction:column;gap:5px;padding:8px 0;border-bottom:1px solid #1e303c}
+.personnel-mini-stat span,.bio-fact>span,.personnel-status-row span{font-size:8px;letter-spacing:.8px;color:var(--muted)}
+.personnel-mini-stat strong{font-size:10px;color:#cbd9df}
+.personnel-main,.personnel-status{min-width:0}
+.personnel-section-heading{display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--line);font-size:10px;letter-spacing:1.1px;color:var(--cyan)}
+.personnel-section-heading small{font-size:8px;letter-spacing:.7px;color:var(--muted)}
+.bio-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:13px}
+.bio-fact{min-height:88px;padding:13px;background:#111f2a;border:1px solid #263b48;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:7px;min-width:0}
+.bio-fact-primary{background:linear-gradient(145deg,#142a35,#11202a);border-color:#34545d}
+.bio-fact strong{font:700 16px Rajdhani,sans-serif;letter-spacing:.5px;overflow-wrap:anywhere}
+.bio-fact-primary strong{font-size:21px;color:#d9efed}
+.bio-fact small{font-size:8px;color:var(--muted)}
+.personnel-section-spaced{margin-top:25px}
+.bio-description{display:flex;gap:13px;align-items:flex-start;padding:16px;margin-top:13px;background:#101c26;border:1px dashed #304652}
+.bio-placeholder-mark{width:27px;height:27px;flex:none;display:grid;place-items:center;border:1px solid #38535e;color:var(--cyan);font-size:17px}
+.bio-description strong{font-size:9px;letter-spacing:.8px;color:#c5d5dc}
+.bio-description p{font-size:9px;line-height:1.7;color:var(--muted);margin:7px 0 0}
+.personnel-status{padding:0 0 0 16px;border-left:1px solid var(--line)}
+.personnel-status-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:18px}
+.personnel-status-row strong{font-size:10px;text-align:right}
+.personnel-meter{height:5px;background:#1d303b;margin-top:8px;overflow:hidden}
+.personnel-meter i{display:block;width:100%;height:100%;background:var(--green)}
+.personnel-meter.stamina i{background:var(--cyan)}
+.personnel-status-separated{border-top:1px solid var(--line);padding-top:16px;margin-top:22px}
+.personnel-footnote{font-size:8px;line-height:1.7;color:var(--muted);margin-top:24px}
+.personnel-footer{display:flex;justify-content:space-between;gap:12px;padding-top:12px;border-top:1px solid var(--line);font-size:8px;letter-spacing:.8px;color:var(--muted)}
+.personnel-footer .status-dot{margin-right:7px}
+@media(max-width:900px){.personnel-layout{grid-template-columns:150px minmax(0,1fr)}.personnel-status{grid-column:1/-1;border-left:0;border-top:1px solid var(--line);padding:16px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:18px}.personnel-status>.personnel-section-heading,.personnel-footnote{grid-column:1/-1}.personnel-status-separated{margin-top:18px}}
+@media(max-width:600px){.personnel-layout{grid-template-columns:1fr}.personnel-identity{display:grid;grid-template-columns:72px 1fr;column-gap:12px;align-items:center}.personnel-portrait{grid-row:span 3;width:72px;height:72px;aspect-ratio:1;margin:0}.personnel-portrait span{font-size:40px}.personnel-divider{display:none}.personnel-mini-stat{padding:5px 0}.bio-facts{gap:7px}.bio-fact{padding:10px;min-height:78px}.personnel-footer{font-size:7px}.personnel-status{grid-template-columns:1fr 1fr}}
