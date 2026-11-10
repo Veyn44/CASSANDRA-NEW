@@ -12,13 +12,18 @@ export function createCrewMember({ id, name, x, y, color = "#e6b95f" }) {
     isMoving: false,
     drafted: false,
     health: 100,
-    maxHealth: 100,\n    stamina: 100,\n    maxStamina: 100,\n    carryCapacity: 30,\n    carriedWeight: 0,\n    weapon: null,
+    maxHealth: 100,
+    stamina: 100,
+    maxStamina: 100,
+    carryCapacity: 30,
+    carriedWeight: 0,
+    weapon: null,
     commandOrder: "hold",
     commandRevision: 0,
     attackTimer: 0,
     attackCooldown: 0,
-    update(delta, world) {
-      moveEntity(this, delta, world);
+    update(delta, world, pawns = []) {
+      moveEntity(this, delta, world, pawns);
       const difference = Math.atan2(
         Math.sin(this.aimAngle - this.rotation),
         Math.cos(this.aimAngle - this.rotation)
