@@ -1,6 +1,7 @@
 import { GameClock } from "./game-clock.js";
 import { Camera } from "../camera/camera.js";
 import { createCommander } from "../entities/pawns/commander.js";
+import { createCrewMember } from "../entities/pawns/crew-member.js";
 import { createWorld } from "../world/world.js";
 import { InputController } from "../player/input-controller.js";
 import { Renderer } from "../rendering/renderer.js";
@@ -9,9 +10,13 @@ export function createGame({ canvas }) {
   const clock = new GameClock();
   const world = createWorld();
   const commander = createCommander({ x: 24.5, y: 20.5 });
+  const crew = [
+    commander,
+    createCrewMember({ id: "crew-02", name: "Mira", x: 21.5, y: 24.5, color: "#e6b95f" }),
+  ];
   const camera = new Camera();
-  const renderer = new Renderer(canvas, world, commander, camera);
-  const input = new InputController(canvas, commander, camera, clock, renderer);
+  const renderer = new Renderer(canvas, world, crew, camera);
+  const input = new InputController(canvas, crew, camera, clock, renderer);
 
   let frameId = 0;
   let previousTime = 0;
@@ -26,18 +31,17 @@ export function createGame({ canvas }) {
     elapsed += delta;
 
     input.update(delta);
-    commander.update(delta, world);
-    camera.follow(commander, delta, commander.drafted);
+    if (!clock.paused) {
+      for (const pawn of crew) pawn.update(delta, world);
+    }
+    camera.follow(commander, delta, commander.drafted && !camera.manual);
     renderer.render(elapsed, clock.paused);
 
     document.querySelector("#clock-readout").textContent = formatClock(elapsed);
     document.querySelector("#coords-readout").textContent =
       `X ${String(Math.floor(commander.x)).padStart(3, "0")} · Y ${String(Math.floor(commander.y)).padStart(3, "0")}`;
     document.querySelector("#camera-readout").textContent = `ZOOM ${Math.round(camera.zoom * 100)}%`;
-    document.querySelector("#unit-state").textContent = commander.drafted
-      ? (commander.isMoving ? "DRAFTED · MOVING" : "DRAFTED")
-      : "AUTONOMOUS";
-
+    document.querySelector("#unit-state").textContent = commander.drafted ? "DRAFTED" : "AUTONOMOUS";
     frameId = requestAnimationFrame(frame);
   }
 
@@ -46,14 +50,12 @@ export function createGame({ canvas }) {
     running = true;
     frameId = requestAnimationFrame(frame);
   }
-
   function destroy() {
     running = false;
     cancelAnimationFrame(frameId);
     input.destroy();
   }
-
-  return { start, destroy, clock, world, commander, camera };
+  return { start, destroy, clock, world, commander, crew, camera };
 }
 
 function formatClock(seconds) {
