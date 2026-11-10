@@ -108,3 +108,10 @@ Stručný vývojový deník CASSANDRA-NEW. Zachycuje nejen změny v kódu, ale t
 - **Herní důvod:** všechny pracovní úkony budou mít právě jeden profesní tag; XP rozvíjí pouze odpovídající profesi. Operator sjednocuje budoucí hauling/transport/transportní robotiku; Pilot zatím není samostatná profese.
 - **Hranice implementace:** nepřidávají se konkrétní pracovní akce, XP odměny, denní AP reset/spotřeba, náhodné mastery, celkový Pawn level, UI ani AI. Carry capacity se tímto commitem nemění.
 - **Ověření:** změny zapsány do GitHubu; runtime/browser test nebyl proveden.
+
+
+### 2026-11-10 — Profession mastery XP curve and personnel UI
+- **Kód:** opraven výchozí stav všech profesí na 1 mastery star = 1 AP. Potřebné XP pro další level se odvozují od mastery stars: 100 × počet hvězdiček. Každý Pawn tak může vykonávat všechny profese už od začátku.
+- **UI:** do personnel detailu přidána záložka PROFESSIONS se všemi devíti profesními kartami, Level, XP progress barem, efficiency, AP a mastery stars. Data se vykreslují z vybraného Pawna.
+- **Hranice:** nebyly přidány pracovní úkony, XP odměny, mastery progression ani denní AP ekonomika. UI pouze zobrazuje aktuální stav.
+- **Ověření:** změny zapsány do GitHubu; runtime/browser test nebyl proveden.
