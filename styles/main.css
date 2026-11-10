@@ -148,3 +148,27 @@
 .personnel-footer .status-dot{margin-right:7px}
 @media(max-width:900px){.personnel-layout{grid-template-columns:150px minmax(0,1fr)}.personnel-status{grid-column:1/-1;border-left:0;border-top:1px solid var(--line);padding:16px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:18px}.personnel-status>.personnel-section-heading,.personnel-footnote{grid-column:1/-1}.personnel-status-separated{margin-top:18px}}
 @media(max-width:600px){.personnel-layout{grid-template-columns:1fr}.personnel-identity{display:grid;grid-template-columns:72px 1fr;column-gap:12px;align-items:center}.personnel-portrait{grid-row:span 3;width:72px;height:72px;aspect-ratio:1;margin:0}.personnel-portrait span{font-size:40px}.personnel-divider{display:none}.personnel-mini-stat{padding:5px 0}.bio-facts{gap:7px}.bio-fact{padding:10px;min-height:78px}.personnel-footer{font-size:7px}.personnel-status{grid-template-columns:1fr 1fr}}
+
+
+/* Personnel section navigation and initial GEAR overview. */
+.personnel-header{align-items:center;gap:20px}
+.personnel-heading-copy{min-width:190px}
+.personnel-tabs{display:flex;align-items:center;gap:5px;margin-left:auto;margin-right:clamp(8px,2vw,30px);align-self:stretch}
+.personnel-tab{position:relative;min-width:76px;padding:10px 13px 8px;background:transparent;border:1px solid transparent;color:var(--muted);font:600 10px 'IBM Plex Mono',monospace;letter-spacing:1px;cursor:pointer}
+.personnel-tab:hover{color:var(--text);background:#12212b}
+.personnel-tab.active{color:var(--cyan);background:#11232c;border-color:#2e515a}
+.personnel-tab.active:after{content:"";position:absolute;left:10px;right:10px;bottom:-1px;height:2px;background:var(--cyan);box-shadow:0 0 9px #65d6d177}
+.personnel-tab-content[hidden]{display:none}
+.gear-tab-content{flex:1;min-height:300px;padding:4px 0 24px}
+.gear-overview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}
+.gear-overview-card{display:flex;align-items:center;gap:15px;min-height:108px;padding:17px;background:linear-gradient(145deg,#13232e,#101c26);border:1px solid #2a414e}
+.gear-card-icon{width:44px;height:44px;flex:none;display:grid;place-items:center;border:1px solid #3b5963;background:#152a34;color:var(--cyan);font:24px Rajdhani,sans-serif}
+.gear-overview-card>div:last-child{display:flex;flex-direction:column;gap:6px;min-width:0}
+.gear-overview-card span{font-size:8px;letter-spacing:1px;color:var(--muted)}
+.gear-overview-card strong{font:700 17px Rajdhani,sans-serif;letter-spacing:.7px;overflow-wrap:anywhere}
+.gear-overview-card small{font-size:8px;color:var(--muted)}
+.gear-placeholder{display:flex;gap:13px;align-items:flex-start;margin-top:18px;padding:17px;background:#101c26;border:1px dashed #304652}
+.gear-placeholder>div{min-width:0}
+.gear-placeholder strong{font-size:9px;letter-spacing:.8px;color:#c5d5dc}
+.gear-placeholder p{font-size:9px;line-height:1.7;color:var(--muted);margin:7px 0 0;max-width:720px}
+@media(max-width:700px){.personnel-header{flex-wrap:wrap;gap:12px}.personnel-heading-copy{min-width:0;flex:1}.personnel-tabs{order:3;width:100%;margin:0;align-self:auto;border-top:1px solid var(--line);padding-top:8px}.personnel-tab{flex:1}.gear-overview-grid{grid-template-columns:1fr}}
