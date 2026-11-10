@@ -24,6 +24,5 @@ export const PROFESSION_DEFINITIONS = Object.freeze({
 
 export const PROFESSION_MAX_LEVEL = 30;
 export const PROFESSION_XP_PER_LEVEL = 100;
-export const PROFESSION_BASE_AP = 1;
 export const PROFESSION_AP_PER_MASTERY_STAR = 1;
 export const PROFESSION_EFFICIENCY_PER_LEVEL = 0.1;
