@@ -1,4 +1,4 @@
-// Base anatomy for a pawn. Values are design defaults, not final balance.
+// Base anatomy for a pawn. Each part owns an independent health pool.
 export const BODY_PART_BASE_HP = Object.freeze({
   head: 30,
   torso: 40,
