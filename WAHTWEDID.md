@@ -129,3 +129,15 @@ Stručný vývojový deník CASSANDRA-NEW. Zachycuje nejen změny v kódu, ale t
 - **Hranice:** dosavadní ovládání melee útoku v InputControlleru zůstalo beze změny a zatím nevolá ActionExecutor. Akční infrastruktura je připravena pro další napojování; základnové operace, společná pracovní kapacita, skill požadavky a UI nejsou součástí této implementace.
 - **Dokumentace:** založen WHATWEHAVE.md jako průběžný přehled skutečně implementovaných funkcí a jejich herního záměru. WHATTODO.md zůstává návrhovou pamětí a WAHTWEDID.md historií změn.
 - **Ověření:** změny zapsány do GitHubu. Runtime/browser test nebyl proveden.
+
+
+### 2026-11-11 — Schválení nové identity hry a vývojového rozdělení
+- **Rozhodnutí:** Cassandra je mobilní základna; shuttle slouží výhradně k lokálním asteroidovým expedicím v rámci aktuální soustavy. Cassandra cestuje mezi soustavami za spotřeby energie a surovin.
+- **Mapa:** počáteční plátno 128×128 s architekturou umožňující změnu rozměrů; každá expedice má vlastní samostatnou mapu asteroidu. Galaxie má hierarchii 16×16 sektorů → 16×16 regionů → 16×16 soustav v každém regionu → 1–8 planet v soustavě → 1 až X asteroidů na planetě.
+- **Encountery:** jediným lokálním encounterem je asteroid jako jedna mapa. Mohou se v něm vzácně objevit moduly cizích lodí a stanic. Podzemí, doly, patra a víceúrovňové mapy se ruší.
+- **Kolonie:** modulární stavitelná loď s automatickou detekcí sekcí; jedna primární funkce/modul na sekci, sekundární moduly jako doplňky; maximálně jeden panel na sekci pro stav, atmosféru, teplotu a tlak. Přesný způsob stavění zůstává otevřený.
+- **Posádka:** Pawni na Cassandře žijí autonomně s jednoduchým a předvídatelným chováním. Hráč přímo ovládá pouze hlavního protagonistu; ostatní Pawni jsou autonomní posádka/prostředí, nikoli další hráčsky draftované jednotky.
+- **Expedice:** real-time top-down režim na samostatné mapě. Zůstává otevřené, jak přesně základna pokračuje v simulaci a jak se synchronizuje čas během expedice; hráč nemá být nucen sledovat dvě obrazovky současně.
+- **Architektura:** navrženo 12 hlavních feature větví. Přidán/aktualizován návrhový přehled; nejde o implementaci herních mechanik.
+- **Důležitá revize:** starší návrh přímého zadávání všech základnových pracovních operací a úplného zastavení základny během expedice je v rozporu s novým směrem a považuje se za překonaný, dokud nebude znovu výslovně schválen.
+- **Ověření:** dokumentační a Git operace; žádný runtime/browser test, žádné herní mechaniky nebyly implementovány.
