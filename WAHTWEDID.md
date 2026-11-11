@@ -97,8 +97,7 @@ Stručný vývojový deník CASSANDRA-NEW. Zachycuje nejen změny v kódu, ale t
 ### 2026-11-10 — Pawn professions foundation
 - **Implementační commity:**
   - [ecace22 — profession definitions](https://github.com/Veyn44/CASSANDRA-NEW/commit/ecace22171fbcdcffd10716549aff6f457de85f7)
-  - [d228bb2 — profession progression](https://github.com/Veyn44/CASSANDRA-NEW/commit/d228bb2d8f52fc522803a43efc1f4b9f838016d4)
-  - [044dc2f — crew profession initialization](https://github.com/Veyn44/CASSANDRA-NEW/commit/044dc2f9f0aa62ffe8821ca0aea139a4010272f8)
+  - [d228bb2 — profession progression](https://github.com/Veyn44/CASSANDRA-NEW/commit/d228bb2d8f52fc522803a43efc1f4b9f838016d4)  - [044dc2f — crew profession initialization](https://github.com/Veyn44/CASSANDRA-NEW/commit/044dc2f9f0aa62ffe8821ca0aea139a4010272f8)
   - [b451512 — commander profession initialization](https://github.com/Veyn44/CASSANDRA-NEW/commit/b451512476863ea4e0266f331a3ae40a34acdc93)
   - [b64b550 — WHATTODO profession model](https://github.com/Veyn44/CASSANDRA-NEW/commit/b64b550c2a4b3f4cf2dbaf89a14e42429aff477a)
   - [7fd1303 — WAHTWEDID entry](https://github.com/Veyn44/CASSANDRA-NEW/commit/7fd130389c7bd0106aa3345c7585793191643c8d)
@@ -115,3 +114,18 @@ Stručný vývojový deník CASSANDRA-NEW. Zachycuje nejen změny v kódu, ale t
 - **UI:** do personnel detailu přidána záložka PROFESSIONS se všemi devíti profesními kartami, Level, XP progress barem, efficiency, AP a mastery stars. Data se vykreslují z vybraného Pawna.
 - **Hranice:** nebyly přidány pracovní úkony, XP odměny, mastery progression ani denní AP ekonomika. UI pouze zobrazuje aktuální stav.
 - **Ověření:** změny zapsány do GitHubu; runtime/browser test nebyl proveden.
+
+### 2026-11-11 — Action System foundation
+- **Implementační commity:**
+  - [6cd21a8 — action registry](https://github.com/Veyn44/CASSANDRA-NEW/commit/6cd21a8b2b94f5021f153972acea9b8916ba26e0)
+  - [41d237c — action validation](https://github.com/Veyn44/CASSANDRA-NEW/commit/41d237c8a6f1f5bf29803fd9cb1a6d2f1c348fee)
+  - [b79881a — action executor](https://github.com/Veyn44/CASSANDRA-NEW/commit/b79881adc4664527312ed0f87a8f83e2d49e4e21)
+  - [6368532 — first expedition action](https://github.com/Veyn44/CASSANDRA-NEW/commit/6368532e3bd0c6b072bb228f9345cbb1d54f2705)
+  - [681f88d — default registry](https://github.com/Veyn44/CASSANDRA-NEW/commit/681f88d092542348a8bb4b572eb5a8e81e04127d)
+  - [cca64ca — game initialization](https://github.com/Veyn44/CASSANDRA-NEW/commit/cca64cadeaa148de690d4abc0e31c736fa8ef258)
+  - [7173f1f — WHATWEHAVE overview](https://github.com/Veyn44/CASSANDRA-NEW/commit/7173f1ff4dd1b2a2956c69e1b27217776f701457)
+- **Kód:** zaveden ActionRegistry, ActionExecutor a samostatná validace. Registry podporuje libovolné ID, metadata, filtrování podle kontextu/kategorie a akce deklarující více kontextů. První registrovaná definice je expedition.melee-attack; registry i executor se vytvářejí při startu hry a jsou dostupné z objektu hry.
+- **Architektura:** definice jsou oddělené od registru a provádění. Složky colony/common, colony/specialized, expedition/common a expedition/specialized jsou organizační výchozí členění, nikoli pevně zakódované kategorie.
+- **Hranice:** dosavadní ovládání melee útoku v InputControlleru zůstalo beze změny a zatím nevolá ActionExecutor. Akční infrastruktura je připravena pro další napojování; základnové operace, společná pracovní kapacita, skill požadavky a UI nejsou součástí této implementace.
+- **Dokumentace:** založen WHATWEHAVE.md jako průběžný přehled skutečně implementovaných funkcí a jejich herního záměru. WHATTODO.md zůstává návrhovou pamětí a WAHTWEDID.md historií změn.
+- **Ověření:** změny zapsány do GitHubu. Runtime/browser test nebyl proveden.
