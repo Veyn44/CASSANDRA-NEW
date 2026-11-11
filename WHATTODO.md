@@ -91,6 +91,11 @@ Nejdříve společně definovat odpovědnosti, datové modely, životní cyklus 
    - Definovat pauzu, rychlost simulace, delta time, tick a pořadí aktualizací.
    - Určit, které systémy běží v kterém režimu a jak reagují na pozastavení.
    - Navrhnout synchronizaci základny během expedice; respektovat schválený směr, že základna má pokračovat v autonomní simulaci. Přesná pravidla se nesmějí domyslet bez rozhodnutí.
+   - **Schválený směr pro čas expedice: varianta A – společný čas pokračuje i během encounteru.** Délka encounteru se započítává do uplynulého herního času na Cassandře. Pokud hráč stráví na asteroidu 45 minut herního času, na Cassandře uplyne stejných 45 minut herního času.
+   - Během encounteru hráč neřídí základnu a nemusí sledovat její obrazovku. Základnová simulace pokračuje autonomně na pozadí; události a následky se vyhodnocují bez vyžadování souběžné pozornosti hráče. Přehled událostí a případné požadavky na reakci hráč obdrží při návratu k řízení Cassandry.
+   - Herní čas je zrychlený vůči reálnému času a jeho rychlost ovlivňuje hráčem zvolená rychlost simulace. Expedice může být v reálném čase intenzivní a dlouhá, zatímco odpovídající časový posun na Cassandře může představovat jen krátký úsek reálného času při běžné základnové simulaci. Konkrétní převodní poměr, limity a pravidla změny rychlosti je nutné navrhnout.
+   - Let k asteroidu a zpět má definovanou herní dobu (např. 4 hodiny); tato doba se započítává do stejného autoritativního herního času. Po příletu se nabídne encounter; po ukončení mise začne návrat. Přesné chování UI, přerušení a časové rychlosti v jednotlivých stavech mise zůstává k návrhu.
+   - Zásada pozornosti hráče: během encounteru se nezobrazuje ani nevyžaduje aktivní řízení základny. To však samo o sobě neznamená zastavení její simulace.
    - Zajistit, aby systémy nevytvářely vlastní nezávislé kalendáře nebo nekonzistentní časovače.
    - Definovat determinismus a pravidla pro ukládání/obnovu časového stavu, pokud budou potřeba.
 
