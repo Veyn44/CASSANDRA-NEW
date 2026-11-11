@@ -59,6 +59,8 @@ Nejdříve společně definovat odpovědnosti, datové modely, životní cyklus 
    - **Schválený způsob získávání služeb: varianta B.** Každý systém obdrží při `initialize(context)` pouze Game Context a požadované služby si získá přes System Registry podle ID veřejné služby. Bootstrap nepředává každému systému individuálně sestavený objekt závislostí.
    - Před inicializací musí Registry vyřešit všechny poskytovatele, ověřit závislosti a připravit jejich veřejná API tak, aby konzument při své inicializaci nemohl získat dosud nepřipravenou povinnou službu.
    - Přesný okamžik zpřístupnění služby vůči lifecycle poskytovatele, pravidla pro volitelné služby a ochrana před přístupem k interním implementacím budou součástí detailního API návrhu.
+   - **Schválený okamžik zpřístupnění služby: varianta A.** Veřejná služba se zpřístupní po úspěšném dokončení `initialize(context)` jejího poskytovatele. Poskytovatel tím garantuje, že veřejné API je připravené k použití, i když jeho vlastní provoz ještě nezačal.
+   - Systémy se inicializují v závislostním pořadí. Teprve po úspěšné inicializaci všech systémů následuje samostatná fáze `start()`; tím se oddělí příprava API od zahájení herní činnosti.
    - Jak systém deklaruje své ID, závislosti a poskytované služby.
    - Jak se systémy registrují, inicializují, spouštějí, pozastavují, obnovují a ukončují.
    - Pořadí inicializace a bezpečné řešení chyb při startu.
