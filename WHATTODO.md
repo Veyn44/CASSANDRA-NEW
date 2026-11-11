@@ -235,11 +235,13 @@ Vitality má být společná oblast pro biologický a fyzický stav Pawna. Nejde
 
 ### 5.4 Stamina
 
-- Stamina zůstává samostatnou součástí Vitality.
-- Bude se spotřebovávat při vybraných pracovních a bojových akcích podle jejich individuální ceny.
-- Příklad: Mining může stát 10 Stamina za vytěženou tile.
-- Profesní AP a Stamina mají odlišné role: AP vyjadřuje profesní pracovní kapacitu, Stamina fyzickou výdrž.
-- Konkrétní ceny, regenerace, nulový stav a návazné Conditions se dopracují později.
+- Stamina je individuální vlastnost každého Pawna.
+- V základnovém pracovním modelu se individuální Stamina nespotřebovává při každé akci; její hodnota přispívá do společné pracovní kapacity kolonie.
+- Společná kapacita se získá součtem Staminy započítávaných Pawnů a určuje počet dostupných pracovních operací v tahu.
+- Příklad: pět Pawnů se Staminou 5 poskytuje 25 společných pracovních akcí.
+- Stamina má být vyjádřena v jednotkách akcí; výchozí hodnota 5 je pouze ilustrativní návrh.
+- Přesný přepočet, obnova, vliv zdravotního stavu a zacházení s Pawnem mimo základnu zůstávají otevřené.
+- Stamina a odborná zkušenost jsou oddělené veličiny: Stamina určuje množství práce, skill její odbornost/efektivitu.
 
 ### 5.5 Vyčerpání a Conditions
 
