@@ -40,6 +40,10 @@ Nejdříve společně definovat odpovědnosti, datové modely, životní cyklus 
    - Jak se kontext vytváří, předává a ukončuje.
    - Jak zabránit tomu, aby se z něj stal globální kontejner všech herních dat.
    - Která data vlastní Core a která pouze zpřístupňuje jejich vlastníkům.
+   - **Schválený směr: varianta C – hybridní Game Context.** Kontext přímo zpřístupňuje společné infrastrukturní služby (např. Event Bus, Clock, Entity Registry, World Registry/Context, Persistence a Logger) a zároveň poskytuje přístup k registrovaným herním systémům přes System Registry.
+   - Herní systémy nebudou pevně zadrátované jako vlastnosti Game Contextu typu `context.pawnLife` nebo `context.environment`. Získávají se přes registry podle stabilního ID a veřejného kontraktu.
+   - Game Context není vlastníkem dat jednotlivých systémů ani univerzálním úložištěm herního stavu. Každý systém zůstává vlastníkem svých dat a zveřejňuje pouze dohodnuté API.
+   - Důvod rozhodnutí: konečná podoba hry a její budoucí systémy nejsou dosud známé; architektura proto musí umožňovat přidávání, odebírání a výměnu systémů bez přepisování centrálního kontextu.
 
 2. **System Registry a životní cyklus systémů**
    - Jak systém deklaruje své ID, závislosti a poskytované služby.
