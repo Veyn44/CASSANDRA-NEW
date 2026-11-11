@@ -63,6 +63,7 @@ Nejdříve společně definovat odpovědnosti, datové modely, životní cyklus 
    - Systémy se inicializují v závislostním pořadí. Teprve po úspěšné inicializaci všech systémů následuje samostatná fáze `start()`; tím se oddělí příprava API od zahájení herní činnosti.
    - **Schválené chování při selhání startu: varianta A – atomické spuštění celé sestavy.** Pokud selže `start()` kteréhokoli systému, Bootstrap zastaví další spouštění, označí start sestavy jako neúspěšný a provede úklid všech systémů, které úspěšně prošly inicializací, v opačném pořadí inicializace. Hra nesmí pokračovat v částečně spuštěném stavu.
    - Stejný princip bezpečného selhání a úklidu se musí přesně definovat také pro chyby během registrace a inicializace. Výjimky pro volitelné systémy se nesmějí zavádět implicitně; případná podpora bude samostatné explicitní rozhodnutí.
+   - **Schválený způsob práce s volitelnými službami: varianta B.** Registry poskytne `hasService(serviceId)` pro kontrolu dostupnosti a `getService(serviceId)` pro získání služby. Požadavek na neexistující službu přes `getService()` musí vyvolat srozumitelnou chybu; volitelnou službu je nutné před získáním ověřit.
    - Jak systém deklaruje své ID, závislosti a poskytované služby.
    - Jak se systémy registrují, inicializují, spouštějí, pozastavují, obnovují a ukončují.
    - Pořadí inicializace a bezpečné řešení chyb při startu.
