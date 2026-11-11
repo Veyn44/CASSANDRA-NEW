@@ -56,6 +56,9 @@ Nejdříve společně definovat odpovědnosti, datové modely, životní cyklus 
    - **Schválený model závislostí: varianta B – závislosti na veřejných službách.** Systém deklaruje služby, které poskytuje, a požadované služby, které potřebuje; konzument nemusí znát konkrétní systém ani jeho interní implementaci.
    - V první verzi má každá služba právě jednoho poskytovatele. Chybějící požadovaná služba nebo více poskytovatelů stejné služby je validační chyba před inicializací. Volitelné služby mohou chybět.
    - Konkrétní identifikátory a verze kontraktů služeb, způsob jejich zpřístupnění a pravidla kompatibility se dopracují v návrhu veřejného API.
+   - **Schválený způsob získávání služeb: varianta B.** Každý systém obdrží při `initialize(context)` pouze Game Context a požadované služby si získá přes System Registry podle ID veřejné služby. Bootstrap nepředává každému systému individuálně sestavený objekt závislostí.
+   - Před inicializací musí Registry vyřešit všechny poskytovatele, ověřit závislosti a připravit jejich veřejná API tak, aby konzument při své inicializaci nemohl získat dosud nepřipravenou povinnou službu.
+   - Přesný okamžik zpřístupnění služby vůči lifecycle poskytovatele, pravidla pro volitelné služby a ochrana před přístupem k interním implementacím budou součástí detailního API návrhu.
    - Jak systém deklaruje své ID, závislosti a poskytované služby.
    - Jak se systémy registrují, inicializují, spouštějí, pozastavují, obnovují a ukončují.
    - Pořadí inicializace a bezpečné řešení chyb při startu.
