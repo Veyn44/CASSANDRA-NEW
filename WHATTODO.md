@@ -53,6 +53,9 @@ Nejdříve společně definovat odpovědnosti, datové modely, životní cyklus 
    - **Schválený lifecycle kontrakt: varianta C.** Každý systém povinně poskytuje `initialize(context)`, `start()` a `destroy()`. Metody `pause()` a `resume()` jsou volitelné; Registry je volá pouze u systémů, které je implementují.
    - Pozastavení systému je oddělené od jeho aktualizační frekvence a časového režimu. To se navrhne samostatně v bodě Game Clock.
    - Pro první verzi se po dokončení inicializace zakazuje pozdní registrace a odebírání systémů za běhu.
+   - **Schválený model závislostí: varianta B – závislosti na veřejných službách.** Systém deklaruje služby, které poskytuje, a požadované služby, které potřebuje; konzument nemusí znát konkrétní systém ani jeho interní implementaci.
+   - V první verzi má každá služba právě jednoho poskytovatele. Chybějící požadovaná služba nebo více poskytovatelů stejné služby je validační chyba před inicializací. Volitelné služby mohou chybět.
+   - Konkrétní identifikátory a verze kontraktů služeb, způsob jejich zpřístupnění a pravidla kompatibility se dopracují v návrhu veřejného API.
    - Jak systém deklaruje své ID, závislosti a poskytované služby.
    - Jak se systémy registrují, inicializují, spouštějí, pozastavují, obnovují a ukončují.
    - Pořadí inicializace a bezpečné řešení chyb při startu.
