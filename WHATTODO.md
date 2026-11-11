@@ -85,24 +85,31 @@ Nejdříve společně definovat odpovědnosti, datové modely, životní cyklus 
    - Rozlišit události, které oznamují již nastalou skutečnost, od příkazů, které žádají o provedení akce.
    - Stanovit, které události se ukládají do persistence a které jsou pouze dočasné.
 
-4. **Game Clock a časové režimy**
-   - Jeden autoritativní zdroj herního času a jasná definice jeho jednotek.
-   - Rozlišit real-time simulaci expedice, strategický čas základny a případné denní/tahové hranice.
-   - Definovat pauzu, rychlost simulace, delta time, tick a pořadí aktualizací.
-   - Určit, které systémy běží v kterém režimu a jak reagují na pozastavení.
-   - Navrhnout synchronizaci základny během expedice; respektovat schválený směr, že základna má pokračovat v autonomní simulaci. Přesná pravidla se nesmějí domyslet bez rozhodnutí.
+4. **Game Clock, strategický čas a aktualizace simulace**
+   - **Schválený základní princip: existuje jediný Game Clock v celé hře, který vlastní strategický čas Cassandry.** Nebude existovat druhý herní/mission/encounter clock.
+   - Game Clock poskytuje autoritativní strategický herní čas a řídí jeho pauzu, rychlost a delta/tick. Příprava expedice probíhá v běžném základnovém režimu.
+   - Při odletovém tranzitu strategický čas Cassandry běží a základna se simuluje. Po příletu a zahájení aktivního encounteru se Game Clock Cassandry pozastaví a základnová simulace se zmrazí. Po ukončení encounteru a zahájení návratového tranzitu se Game Clock i simulace Cassandry obnoví.
+   - **Expedice nemá vlastní herní čas ani mission clock.** Její gameplay probíhá v real-time, ale žádné herní schopnosti, buffy, consumables ani jiné efekty nesmějí být založené na reálných sekundách/minutách nebo na uplynulém čase encounteru. Technický frame delta může být používán pro plynulý pohyb a vykreslování, nikoli jako herní časovač efektů.
+   - Případný Expedition Watcher může evidovat začátek/konec, pořadí událostí a statistiky mise. Není zdrojem herního času a žádná herní mechanika na jeho stopkách nesmí záviset.
+   - **Žádné časově omezené buffy, efekty ani cooldowny.** Efekty se řídí stavem, událostí, počtem použití, spotřebou prostředků nebo podmínkou. Buff může například platit pro celou následující expedici (For Next Expedition) a skončí jejím dokončením.
+   - Consumables mohou mít okamžitý účinek, například obnovit pevný počet bodů staminy, a mohou být použitelné v základnovém i expedičním režimu. Stamina se spotřebovává použitím schopností; na Cassandře ji Pawn může obnovit jídlem nebo rekreací o pevně danou hodnotu. Běžná obnova je během encounteru nedostupná; tam lze použít pouze consumables. Spánek je samostatná mechanika a není zdrojem obnovy staminy. Detailní pravidla Pawn Life se navrhnou později.
+   - Souboje/expedice mají být navržené tak, aby typický encounter šel dokončit přibližně do 30 minut. Jde o měkký designový cíl, nikoli o časovač, limit nebo automatické ukončení mise.
+   - **Jediný shuttle a sériové expedice:** Cassandra má jeden shuttle. Nová expedice nemůže odstartovat, dokud se předchozí shuttle nevrátí. Po návratu je použité vybavení nutné zkontrolovat, očistit a udržovat, než bude znovu připravené. Počet Pawnů v posádce není omezen na jednu výpravu; hráč může pro další misi vybrat jiné Pawny.
+   - **Game Clock a Simulation Scheduler mají oddělené odpovědnosti.** Clock určuje rychlost strategického herního času; Scheduler rozhoduje, kdy jednotlivé systémy provedou simulační aktualizaci. Zrychlení strategického času zrychlí celou základnovou simulaci stejným herním poměrem, ale jednotlivé systémy mohou mít rozdílné technické frekvence aktualizace kvůli výkonu.
+   - **Simulace a vykreslování jsou oddělené.** Renderer nesmí být vlastníkem herního stavu a nezměněná/neviditelná oblast se nesmí přestat simulovat jen proto, že není vykreslená. Změny mapy se mohou označovat jako dirty tiles/regions, aby renderer překresloval pouze dotčené oblasti.
+   - **Událostmi aktivovaná simulace sekcí:** nečinná sekce nemusí neustále provádět nákladné environmentální výpočty. Levnější mechanismus sleduje relevantní změny konstrukce; například pokles integrity stěny pod návrhový práh (v prototypovém příkladu 75 %) aktivuje podrobnější simulaci celé dotčené sekce. Ta pak vyhodnocuje atmosféru, tlak, teplotu a integritu sdílejících stěn/dveří. Simulace se může vrátit do úsporného režimu, až když pominou všechny důvody pro její aktivitu. Prahové hodnoty a přesný rozsah šíření aktivace zůstávají k návrhu.
+   - Událost může aktivovat i sousední nebo jinak propojené sekce, pokud je změna skutečně ovlivňuje; aktivace jedné sekce automaticky neznamená přepočet celé lodi.
    - **Schválený průběh expedice a základnového času:**
-     1. Hráč v řídicím rozhraní zvolí `Prepare Mission`, vybere Pawny, vybavení a zásoby. Příprava může skončit stavem `Preparation Ready`; alternativně může hráč rovnou zvolit `Start Mission`, čímž se vybrané vybavení a zásoby automaticky sbalí a výprava opustí Cassandru.
-     2. Jakmile výprava opustí Cassandru, její členové a odnesené zásoby nejsou na základnové mapě přítomni. Základna pokračuje v běžné simulaci během odletového tranzitu, který v příkladu trvá 4 herní hodiny.
-     3. Po dokončení tranzitu hra oznámí `Expedition Ready`. Hráč zvolí `Start`; teprve tehdy se vygeneruje/aktivuje samostatná mapa encounteru a základnová simulace Cassandry se pozastaví.
-     4. Během encounteru může hráč přepnout na obrazovku Cassandry a prohlížet ji, ale základna je zmrazená: nelze provádět akce, měnit stav ani posouvat její simulaci.
-     5. Hráč dokončí činnost, všichni dostupní členové výpravy nastoupí do shuttle a hráč zvolí `End Mission`. Encounter se ukončí a výprava zahájí návrat.
-     6. Hra přepne na obrazovku Cassandry a obnoví její simulaci. Hráč může pokračovat v základnové hře; výprava a její členové zůstávají mimo základnu během návratového tranzitu, v příkladu další 4 herní hodiny.
-     7. Po dokončení návratu se Pawni, vybavení a přivezené zásoby/loot vrátí do základnového světa podle výsledku mise.
-   - **Encounter time se do základnového času vůbec nezapočítává.** Doba strávená na asteroidové mapě se ignoruje; žádné měření reálné délky encounteru, převod na herní čas, zaokrouhlování ani dodatečné dopočítávání času po návratu se neprovádí.
-   - Základna se tedy simuluje během odletového a návratového tranzitu, ale nikoli během aktivního encounteru. Posádka je mimo základnu po dobu obou tranzitů; délka samotného encounteru tuto dobu neprodlužuje.
-   - Čtyři hodiny na cestu tam a čtyři hodiny na cestu zpět jsou zatím příkladové hodnoty; jejich herní délka, rychlost průběhu a případné variace se musí navrhnout v rámci Game Clock a Navigation/Vehicles.
-   - Přepnutí světa, zmrazení/obnovení simulace a oddělení tranzitu od encounteru musí být součástí explicitního kontraktu Game Clock/World Context; nesmí vzniknout dva nekonzistentní kalendáře.
+     1. Hráč zvolí Prepare Mission, vybere Pawny, vybavení a zásoby. Může počkat na Preparation Ready, nebo rovnou zvolit Start Mission.
+     2. Při skutečném odletu Pawni a odnesené zásoby opustí základnový svět. Cassandra pokračuje v běžné simulaci během odletového tranzitu.
+     3. Po dokončení tranzitu hra oznámí Expedition Ready. Hráč zvolí Start; aktivuje se samostatná mapa encounteru a Game Clock Cassandry se pozastaví.
+     4. Během encounteru může hráč obrazovku Cassandry pouze prohlížet. Základna je zmrazená: žádné akce, změny stavu ani simulační kroky.
+     5. Po dokončení mise a nástupu dostupných Pawnů do jediného shuttle hráč zvolí End Mission. Encounter skončí a výprava zahájí návrat.
+     6. Základnová simulace Cassandry se obnoví během návratového tranzitu. Výprava zůstává mimo základnu.
+     7. Po dokončení návratu se Pawni, vybavení a přivezené zásoby/loot vrátí do základnového světa podle výsledku mise; vybavení následně vyžaduje kontrolu, čištění a údržbu.
+   - Doba encounteru se do strategického času Cassandry vůbec nezapočítává. Neprovádí se měření délky encounteru pro posun základny, převod, zaokrouhlování ani dodatečné dopočítávání.
+   - Dřívější příkladové čtyři hodiny odletového a čtyři hodiny návratového tranzitu nejsou definitivní hodnoty; délka cesty se navrhne v Game Clock a Navigation/Vehicles.
+   - World switching, zmrazení/obnovení simulace a oddělení tranzitu od encounteru musí být součástí explicitního kontraktu Game Clock/World Context; nesmí vzniknout druhý herní kalendář.
    - Definovat determinismus a pravidla pro ukládání/obnovu časového stavu, pokud budou potřeba.
 
 5. **Entity Registry a identita entit**
@@ -181,6 +188,27 @@ Pořadí větví:
 11. `feature/navigation-vehicles` — navigace Cassandry, shuttle a cestovní kontrakty.
 
 Pořadí je výchozí závislostní plán; pokud návrh odhalí skutečnou technickou závislost, upraví se výslovně a zapíše do dokumentace.
+
+
+### Návrhový podklad: modulární konstrukce Cassandry (před implementací)
+
+Následující směr je schválený jako základ dalšího návrhu systému feature/colony-construction. Nejde o implementační specifikaci; přesné datové kontrakty, validační pravidla a edge cases je nutné dopracovat před psaním systému.
+
+- Cassandra se staví na gridu jako modulární vesmírná stanice složená z funkčních sekcí a spojovacích chodeb/přechodových prefabs. Cílový vzhled je přehledná modulární konstrukce (volně inspirovaná stanicemi typu ISS), nikoli volné skládání jednotlivých stěn jako v RimWorldu.
+- Sekce jsou samostatné prefaby s předdefinovaným půdorysem, vnější konstrukcí, vnitřním prostorem, Control Panelem a jedním hlavním pracovním modulem. Hlavní modul určuje funkci a název sekce. Každá sekce má právě jeden hlavní modul; další vybavení může být podpůrné/dekorativní. Detailní pravidla umisťování vybavení se dopracují později.
+- Schválené základní rozměry sekcí (vnější rozměry včetně obvodové stěny):
+  - Small: 6×6, vnitřní prostor 4×4.
+  - Medium: 8×8, vnitřní prostor 6×6.
+  - Large: 10×10, vnitřní prostor 8×8.
+  - XL: 16×8, vnitřní prostor 14×6.
+- U sekcí se zvažují oříznuté rohy pro vzhled; zatím není rozhodnuto, zda je bude mít i Small. První verze může začít s jednoduchými čtvercovými/obdélníkovými půdorysy.
+- Sekce nemají vlastní konektory ani předem umístěné dveře. Připojení vzniká umístěním spojovací chodby k obvodové stěně sekce.
+- Spojovací chodby jsou samostatné prefaby a samy definují své připojovací konektory. Při platném připojení se v obvodové stěně sekce automaticky vytvoří otvor odpovídající šířce chodby. Příklad: chodba s půdorysem 4×2 vytvoří průchod široký 4 pole. Průchod je skutečná změna konstrukční mapy, nikoli pouze grafický otvor; po odstranění chodby musí být možné otvor konstrukčně uzavřít.
+- Katalog chodeb má být rozšiřitelný o různé tvary: základní rovný/čtvercový spojovací díl, T, L a čtyřsměrný (+) uzel; později další délky, šířky a tvary. Pro první hratelný test stačí několik základních prefabs.
+- Sekce i chodby musí mít datově definované vlastnosti, aby později mohly nést například konstrukční integritu, spotřebu atmosféry a další parametry. Konkrétní environmentální a ekonomické atributy se nyní nenavrhují.
+- Prefab katalog má být datově rozšiřitelný, přednostně přes JSON definice. Engine nesmí mít jednotlivé typy sekcí a chodeb natvrdo zakódované jako jediné povolené tvary. Budoucí interní prefab editor může vytvářet stejné JSON definice, které se načtou do herního katalogu; editor není součástí první implementace.
+- Architektura má umožnit pozdější vlastní prefaby a případně nepravidelné půdorysy, ale první verze se může omezit na předdefinované čtvercové a obdélníkové sekce a malý katalog chodeb.
+- Otevřené otázky před implementací konstrukce: přesná pravidla připojování a validace kolizí; orientace/rotace prefabů; jak chodba identifikuje a mění dotčené obvodové dlaždice sekcí; pravidla pro více spojení na jedné straně; vlastnictví a lifecycle vzniklých dveří/otvorů; odpojování a opravy; JSON schema/verzování; umisťování hlavního modulu a Control Panelu; limity a pravidla vlastních prefabů.
 
 ### Fáze 3 — Integrační ověření kostry
 
