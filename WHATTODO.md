@@ -76,14 +76,28 @@ Nejdříve společně definovat odpovědnosti, datové modely, životní cyklus 
    - Zda a jak se budou systémy aktualizovat v jednotlivých časových režimech.
 
 3. **Event Bus**
-   - Jak se události pojmenovávají a verzují.
-   - Jednotný tvar payloadu: identifikátor události, zdroj, čas/pořadí a vlastní data.
-   - Jak se systémy přihlašují k odběru a jak odběr ruší.
-   - Pravidla synchronního/asynchronního doručování a pořadí událostí.
-   - Jak zabránit nekonečným cyklům událostí a nechtěnému opakovanému zpracování.
-   - Jak se předávají chyby handlerů a jak se události ladí/logují.
-   - Rozlišit události, které oznamují již nastalou skutečnost, od příkazů, které žádají o provedení akce.
-   - Stanovit, které události se ukládají do persistence a které jsou pouze dočasné.
+   - **Účel:** Event Bus je společný infrastrukturní mechanismus pro oznamování skutečností, které už nastaly. Umožňuje volnou komunikaci mezi systémy bez přímých závislostí na jejich interních implementacích.
+   - **Schválený formát události (event envelope):**
+     - `id`: unikátní identifikátor konkrétní události.
+     - `type`: stabilní název události s doménovým prefixem, například `pawn.damaged` nebo `construction.section.created`.
+     - `version`: celé číslo verze payload kontraktu; první verze začíná hodnotou 1.
+     - `source`: stabilní ID systému, který událost publikoval.
+     - `sequence`: monotónně rostoucí pořadové číslo přidělené Event Busem v rámci jeho běhu.
+     - `payload`: datový objekt konkrétní události definovaný jejím kontraktem.
+   - Povinný timestamp se nepoužívá. Pořadí událostí určuje `sequence`; Event Bus nezavádí druhý zdroj herního času.
+   - Po publikování je payload neměnný. Každý typ události má definovaný datový kontrakt a verzi.
+   - **Schválené doručování: synchronní fronta.** Publikovaná událost se vloží do fronty. Pokud právě neprobíhá doručování, Event Bus frontu synchronně zpracuje. Událost publikovaná handlerem během doručování se pouze přidá na konec fronty; nezpůsobí vnořené doručování. Vnější doručovací cyklus pokračuje, dokud fronta není prázdná.
+   - Při běžném volání `publish()` se tedy událost zpracuje synchronně před návratem volajícího. Při volání uvnitř handleru se nová událost pouze zařadí do fronty a doručí se později v rámci právě probíhajícího cyklu.
+   - **Odběry:** systémy se přihlašují ke konkrétnímu typu události a mohou odběr zrušit. Wildcard odběry ani prioritní odběry nejsou součástí první verze.
+   - Více odběratelů dostává událost v pořadí registrace odběrů. Toto pořadí je deterministické při stejném pořadí inicializace a registrace.
+   - Seznam odběratelů se pro každou událost stanoví v okamžiku zahájení jejího doručování. Změny odběrů provedené během doručování ovlivní až následující události; aktuálně doručovaná událost se dokončí podle původního seznamu.
+   - Duplicitní odběr stejného systému na stejný typ události není povolen. Opakované odhlášení je bezpečné a nemá další účinek.
+   - **Chyby handlerů:** každý handler se spouští izolovaně. Výjimka se zachytí a zaznamená přes Logger včetně typu události a ID systému; ostatní odběratelé událost přesto obdrží a fronta pokračuje. Automatické opakování handleru se neprovádí. Chyba handleru sama nevytváří další herní událost.
+   - **Ochrana proti cyklům:** Event Bus má bezpečnostní limit počtu událostí zpracovaných v jednom vyprazdňování fronty. Při jeho překročení doručování bezpečně přeruší a zaznamená technickou chybu, aby vadný řetězec událostí nezamrazil hru.
+   - **Události a příkazy jsou odlišné mechanismy.** Událost oznamuje již nastalou skutečnost a může mít více odběratelů. Příkaz žádá konkrétní systém o provedení akce a volá se přes jeho veřejné API/službu; Event Bus nebude sloužit jako univerzální command bus.
+   - **Persistence:** Event Bus je v první verzi pouze běhový mechanismus. Události se automaticky neukládají, nepřehrávají po načtení hry a netvoří historii kampaně. Každý systém ukládá vlastní stav přes Persistence. Případný event journal, audit nebo replay lze doplnit později jako samostatnou funkci.
+   - Event Bus ověřuje základní obálku události a platnost ID zdrojového systému. Konkrétní strukturu a význam payloadu definuje a dodržuje systém, který daný typ události publikuje.
+   - **Výsledek návrhu:** deterministické synchronní doručování, izolace chyb odběratelů, jasné oddělení příkazů a událostí a žádná automatická persistence událostí. Návrh je uzavřen pro první verzi Core; případné rozšíření se bude řešit až podle skutečné potřeby hry.
 
 4. **Game Clock, strategický čas a aktualizace simulace**
    - **Schválený základní princip: existuje jediný Game Clock v celé hře, který vlastní strategický čas Cassandry.** Nebude existovat druhý herní/mission/encounter clock.
