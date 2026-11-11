@@ -202,11 +202,17 @@ Nejdříve společně definovat odpovědnosti, datové modely, životní cyklus 
    - **Otevřené technické detaily:** přesný kontrakt save participantů, formát snapshotů a manifestu, transakční zápis a obnova po přerušení, retenční pravidla autosave, limity počtu manuálních pozic, přesné schéma metadat a migrací, serializace aktivního encounteru a konkrétní formát hierarchické adresy galaxie.
    - **Výsledek návrhu:** jedna save pozice odpovídá jedné kampani; manuální saves a autosave jsou oddělené; autosave vzniká po bezpečném dokončení expedice; Persistence koordinuje atomické snapshoty, zatímco systémy vlastní svá data; galaxie používá lazy generation a ukládá konkrétní obsah až po skenu.
 8. **Logování, diagnostika a chyby**
-   - Jednotný způsob, jak systémy hlásí chyby a diagnostické informace.
-   - Rozlišit očekávané herní stavy od technických chyb.
-   - Zajistit dohledatelnost zdroje události a systému.
-   - Definovat, co musí být viditelné při vývoji a co může být vypnuté v produkci.
-
+   - **Centrální Logger:** Core poskytuje jednotnou službu Logger. Všechny systémy používají stejné veřejné rozhraní; nesmějí si vytvářet vlastní nekompatibilní logovací mechanismy.
+   - **Úrovně logování:** `DEBUG` (podrobnosti pro vývoj), `INFO` (běžné významné informace), `WARN` (podezřelý stav, ve kterém lze pokračovat), `ERROR` (selhání operace nebo systému) a `CRITICAL` (stav, ve kterém nelze bezpečně pokračovat bez zásahu nebo nouzové pauzy).
+   - **Kontext záznamu:** každý záznam obsahuje časový údaj, úroveň, ID zdrojového systému, kategorii a zprávu. Podle potřeby může nést také entity ID, world ID, encounter ID nebo další strukturovaná metadata. Čas logu je diagnostický údaj, nikoli druhý herní čas.
+   - **Herní události nejsou technické chyby:** běžné herní skutečnosti (například únik atmosféry, poškození Pawna nebo útok nepřítele) se oznamují herními systémy/Event Busem. Logger zaznamenává technické informace o jejich zpracování, nikoli samotný herní význam jako chybu.
+   - **Izolace chyb:** chyba jedné operace nebo handleru nesmí bezdůvodně zastavit ostatní nezávislé systémy. Pokud ale chyba může narušit konzistenci sdíleného stavu nebo kampaně, Core musí zabránit pokračování v nebezpečném částečném stavu a podle závažnosti vyvolat bezpečnou pauzu.
+   - **Transakce a kritické lifecycle operace:** operace jako předání Pawna do shuttle manifestu, End Expedition, návrat Pawna na Cassandru nebo atomické ukládání musí při selhání zanechat jednoznačný diagnostický záznam a nesmějí pokračovat v neověřeném částečném stavu. Logger sám transakci neřídí; rozhodnutí o rollbacku, opakování nebo nouzovém zastavení patří vlastníkovi operace a Persistence/Core kontraktu.
+   - **Diagnostika pro hráče a vývojáře:** hráč dostává srozumitelné oznámení odpovídající herní situaci a závažnosti. Vývojář má k dispozici podrobné technické záznamy s kontextem a identifikací zdroje. Interní stack trace a technické detaily se nemusejí zobrazovat běžnému hráči.
+   - **Výkon a objem:** logování musí podporovat filtrování podle úrovně a kategorie. Opakované zprávy a objemné diagnostické výstupy nesmějí neomezeně růst ani blokovat simulační smyčku. Limity, ukládání logů a jejich rotace se stanoví při implementaci.
+   - **Neměnnost herního stavu:** Logger pouze zaznamenává informace. Nesmí měnit herní stav, provádět herní akce ani rozhodovat o pravidlech simulace.
+   - **Technické detaily k dopracování:** přesné veřejné API, formát strukturovaných záznamů, cílové výstupy (konzole/soubor/vývojářský panel), retenční a rotační pravidla, filtrování a chování při selhání samotného Loggeru.
+   - **Výsledek návrhu:** jednotné úrovně a kontext logů, oddělení herních událostí od technických chyb, izolace běžných chyb a bezpečné zastavení při ohrožení konzistence.
 9. **Integrace existujícího prototypu**
    - Zmapovat současný `game.js`, Game Clock, Input Controller, UI, renderer, Pawn, Suit a Action System.
    - Rozhodnout, které části zůstávají samostatnými službami a které se postupně stanou systémy registrovanými v Core.
