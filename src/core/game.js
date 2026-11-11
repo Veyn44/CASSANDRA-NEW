@@ -7,6 +7,8 @@ import { createSuitForPawn } from "../entities/pawns/equipment/suit-factory.js";
 import { createWorld } from "../world/world.js";
 import { InputController } from "../player/input-controller.js";
 import { Renderer } from "../rendering/renderer.js";
+import { createDefaultActionRegistry } from "../actions/registry/default-actions.js";
+import { ActionExecutor } from "../actions/execution/action-executor.js";
 
 export function createGame({ canvas }) {
   const clock = new GameClock();
@@ -36,6 +38,8 @@ export function createGame({ canvas }) {
   const crew = [commander, mira];
   const camera = new Camera();
   const renderer = new Renderer(canvas, world, crew, camera);
+  const actionRegistry = createDefaultActionRegistry();
+  const actionExecutor = new ActionExecutor(actionRegistry);
   const input = new InputController(canvas, crew, camera, clock, renderer, calendar);
 
   let frameId = 0;
@@ -76,7 +80,7 @@ export function createGame({ canvas }) {
     cancelAnimationFrame(frameId);
     input.destroy();
   }
-  return { start, destroy, clock, calendar, world, commander, crew, camera };
+  return { start, destroy, clock, calendar, world, commander, crew, camera, actionRegistry, actionExecutor };
 }
 
 function formatClock(seconds) {
