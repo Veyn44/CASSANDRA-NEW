@@ -91,12 +91,18 @@ Nejdříve společně definovat odpovědnosti, datové modely, životní cyklus 
    - Definovat pauzu, rychlost simulace, delta time, tick a pořadí aktualizací.
    - Určit, které systémy běží v kterém režimu a jak reagují na pozastavení.
    - Navrhnout synchronizaci základny během expedice; respektovat schválený směr, že základna má pokračovat v autonomní simulaci. Přesná pravidla se nesmějí domyslet bez rozhodnutí.
-   - **Schválený směr pro přepínání mezi základnou a encounterem: během aktivní expedice se simulace Cassandry pozastaví.** Po zahájení encounteru hráč přejde na samostatnou mapu asteroidu; základnový svět se zmrazí a neprovádí žádné simulační kroky. Po ukončení mise a návratu na Cassandru se obnoví přesně ve stavu, v jakém byl při odchodu, s výjimkou případného explicitně schváleného časového posunu.
-   - Encounter má vlastní průběh a může být bez časového limitu. Případný real-time clock encounteru (sekunda za sekundou) je možná varianta, nikoliv zatím schválené pravidlo.
-   - **Otevřená možnost pro časový posun po návratu:** zvažuje se přičíst k základnovému času pouze celé hodiny skutečně strávené v encounteru (např. méně než 1 reálná hodina = žádný posun; 1 celá hodina a více = odpovídající celé hodiny). Zlomky hodin by se nezapočítávaly. Toto pravidlo zatím není schválené a musí se rozhodnout při návrhu Game Clock.
-   - Let Cassandry/shuttle k asteroidu a zpět, například čtyři hodiny v každém směru, je samostatná herní fáze s definovanou herní dobou. Je nutné přesně určit, zda a jak se během tranzitu simuluje základna, a odlišit tranzit od samotného encounteru.
-   - Přepnutí světa, zmrazení/obnovení simulace, čas encounteru a případný časový posun po návratu musí být součástí explicitního kontraktu Game Clock/World Context; nesmí vzniknout dva nekonzistentní kalendáře.
-   - Zajistit, aby systémy nevytvářely vlastní nezávislé kalendáře nebo nekonzistentní časovače.
+   - **Schválený průběh expedice a základnového času:**
+     1. Hráč v řídicím rozhraní zvolí `Prepare Mission`, vybere Pawny, vybavení a zásoby. Příprava může skončit stavem `Preparation Ready`; alternativně může hráč rovnou zvolit `Start Mission`, čímž se vybrané vybavení a zásoby automaticky sbalí a výprava opustí Cassandru.
+     2. Jakmile výprava opustí Cassandru, její členové a odnesené zásoby nejsou na základnové mapě přítomni. Základna pokračuje v běžné simulaci během odletového tranzitu, který v příkladu trvá 4 herní hodiny.
+     3. Po dokončení tranzitu hra oznámí `Expedition Ready`. Hráč zvolí `Start`; teprve tehdy se vygeneruje/aktivuje samostatná mapa encounteru a základnová simulace Cassandry se pozastaví.
+     4. Během encounteru může hráč přepnout na obrazovku Cassandry a prohlížet ji, ale základna je zmrazená: nelze provádět akce, měnit stav ani posouvat její simulaci.
+     5. Hráč dokončí činnost, všichni dostupní členové výpravy nastoupí do shuttle a hráč zvolí `End Mission`. Encounter se ukončí a výprava zahájí návrat.
+     6. Hra přepne na obrazovku Cassandry a obnoví její simulaci. Hráč může pokračovat v základnové hře; výprava a její členové zůstávají mimo základnu během návratového tranzitu, v příkladu další 4 herní hodiny.
+     7. Po dokončení návratu se Pawni, vybavení a přivezené zásoby/loot vrátí do základnového světa podle výsledku mise.
+   - **Encounter time se do základnového času vůbec nezapočítává.** Doba strávená na asteroidové mapě se ignoruje; žádné měření reálné délky encounteru, převod na herní čas, zaokrouhlování ani dodatečné dopočítávání času po návratu se neprovádí.
+   - Základna se tedy simuluje během odletového a návratového tranzitu, ale nikoli během aktivního encounteru. Posádka je mimo základnu po dobu obou tranzitů; délka samotného encounteru tuto dobu neprodlužuje.
+   - Čtyři hodiny na cestu tam a čtyři hodiny na cestu zpět jsou zatím příkladové hodnoty; jejich herní délka, rychlost průběhu a případné variace se musí navrhnout v rámci Game Clock a Navigation/Vehicles.
+   - Přepnutí světa, zmrazení/obnovení simulace a oddělení tranzitu od encounteru musí být součástí explicitního kontraktu Game Clock/World Context; nesmí vzniknout dva nekonzistentní kalendáře.
    - Definovat determinismus a pravidla pro ukládání/obnovu časového stavu, pokud budou potřeba.
 
 5. **Entity Registry a identita entit**
