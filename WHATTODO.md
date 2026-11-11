@@ -260,3 +260,90 @@ Vitality má být společná oblast pro biologický a fyzický stav Pawna. Nejde
 - Jak se definuje Catatonic a zda vychází z jedné hodnoty, kombinace více hodnot, nebo konkrétních Conditions.
 - Jak se individuální Stamina převádí na společnou pracovní kapacitu, jak se obnovuje a jak ji ovlivňují zdravotní stavy.
 - Jak budou orgány začleněny do anatomie a jak jejich poškození ovlivňuje Health a Conditions.
+
+
+---
+
+## 6. Schválený směr hry a systémová architektura — 2026-11-11
+
+Tato sekce má přednost před staršími návrhy, pokud si odporují. Zachycuje nově schválený směr celé hry; nejde o tvrzení, že jsou tyto systémy již implementované.
+
+### 6.1 Základní identita hry
+- Cassandra je mobilní základna a domov kolonie. Mezi hvězdnými soustavami cestuje mateřská loď Cassandra.
+- Shuttle slouží výhradně k lokálním expedicím. Nemůže cestovat mezi planetami ani soustavami.
+- Shuttle může létat k asteroidům obíhajícím jednotlivé planety v aktuální soustavě.
+- Planety jsou součástí astronomické mapy; přistávání na planetách není součástí aktuálního rozsahu hry.
+- Hlavní herní smyčka stojí na získávání materiálů, těžbě asteroidů, boji s nepřáteli a boji s nehostinným vesmírným prostředím.
+- Hra má hard-scifi charakter.
+
+### 6.2 Mapa a lokality
+- Herní galaxie má hierarchii: galaxie 16×16 sektorů; každý sektor 16×16 regionů; každý region 16×16 hvězdných soustav; každá soustava obsahuje 1–8 planet; každá planeta má 1 až X asteroidů.
+- Hierarchie musí být generovatelná a adresovatelná bez nutnosti současně držet celou galaxii v paměti.
+- Počáteční herní plátno má rozměr 128×128.
+- Architektura mapy musí umožnit pozdější změnu rozměrů plátna (zvětšení i zmenšení) bez přepisování herních systémů.
+- Každá expedice vytvoří/načte druhou, samostatnou mapu asteroidu o rozměru 128×128. Mapa expedice je oddělená od mapy Cassandry.
+- Asteroid je jediný typ lokálního encounteru v aktuálním rozsahu. Jeden encounter představuje jeden asteroid a jeho povrchové okolí („drobky“).
+- Encounter může vzácně obsahovat moduly opuštěných či cizích lodí a stanic jako bonusový obsah a důvod k průzkumu.
+- Podzemní těžba, doly, podzemní encountery, patra a přechody mezi patry se ruší. Každý asteroid je jeden encounter bez podzemních úrovní.
+
+### 6.3 Kolonie a konstrukce
+- Cassandra je stavitelná modulární základna s komplexitou orientačně podobnou RimWorldu.
+- Základna se skládá z konstrukčních dílů, místností/sekcí a funkčních modulů.
+- Sekce se automaticky detekují podle uzavřeného prostoru a hranic konstrukce.
+- Každá sekce má právě jeden primární modul, který určuje její hlavní funkci a identitu.
+- Sekundární moduly poskytují podpůrné, doplňkové nebo dekorativní funkce.
+- Každá sekce může mít maximálně jeden ovládací panel, který spravuje a zobrazuje její stav.
+- Panel zobrazuje minimálně stav sekce, atmosféru, teplotu a tlak.
+- Airtight systém je základní součástí konstrukce a simulace prostředí.
+- Způsob stavění (jednotlivé díly po dlaždicích vs. větší stavební bloky) zůstává otevřeným designovým rozhodnutím; architektura nesmí být napevno svázána s jedním způsobem umisťování.
+- Původní vícepodlažní model lodi se opouští. Cassandra je pro tento směr jedna přehledná základnová mapa bez pater.
+
+### 6.4 Posádka a hráčská role
+- Posádka na Cassandře žije autonomně. Běžný provoz nemá vyžadovat ruční zadávání každé jednotlivé činnosti.
+- Autonomie má být záměrně jednoduchá, předvídatelná a levná na vývoj; nechceme komplexní AI plánování ani mikromanagement ve stylu RimWorldu.
+- Hráč přímo ovládá pouze jednoho hlavního Pawna – protagonistu příběhu.
+- Ostatní Pawni nejsou dalšími hráčskými jednotkami. Jsou autonomní součástí posádky a herního prostředí.
+- Na expedici hráč ovládá protagonistu; ostatní členové posádky mohou dostávat jednoduché situační příkazy, nikoli být jednotlivě draftováni jako další hráčské jednotky.
+- Příběh se soustředí na protagonistu; ostatní posádka tvoří živé prostředí a systémové zázemí hry.
+- Starší návrhy, podle kterých hráč přímo zadává všechny běžné pracovní operace a hra nevykonává autonomní práci, jsou tímto rozhodnutím překonané. Je nutné je při dalším návrhu systémů považovat za nahrazené, nikoli za platné pravidlo.
+
+### 6.5 Expedice a čas
+- Expedice je real-time top-down režim.
+- Expedice používá vlastní samostatnou mapu asteroidu; základnová mapa Cassandry zůstává oddělená.
+- Základní datové modely Pawnů, materiálů, předmětů, poškození a akcí mají být sdílené mezi základnou a expedicí, kde to dává smysl.
+- Během expedice musí být vyřešeno, jak základna pokračuje ve své simulaci a řeší provozní problémy, zatímco hráč základnu přímo nevidí.
+- Přesná synchronizace strategického času, denního cyklu a rychlosti simulace během expedice zůstává otevřená. Starší pravidlo úplného zastavení základny během expedice se nepovažuje za potvrzené.
+- Expedice nesmí vyžadovat, aby hráč paralelně sledoval dvě obrazovky. Základnové události se musí řešit autonomně a důležité situace vhodně signalizovat.
+
+### 6.6 Cestování
+- Cassandra provádí meziplanetární/mezisoustavové cestování podle pravidel navigace a skokového pohonu; skok spotřebovává energii a suroviny.
+- Shuttle zajišťuje pouze lokální lety mezi Cassandrou/orbitální pozicí a asteroidy v rámci aktuální planetární soustavy.
+- Shuttle není meziplanetární ani mezisoustavové plavidlo a nemůže nahradit Cassandru v cestování mezi soustavami.
+
+### 6.7 Otevřená rozhodnutí, která nesmí být domyšlena
+- Přesný model automatické práce a ambientního života posádky.
+- Jaké jednoduché příkazy může hráč zadávat členům družiny během expedice.
+- Jak se základna simuluje a jak se synchronizuje čas během expedice.
+- Jak se řeší kritické události na základně, když je hráč na asteroidu.
+- Přesná konstrukční pravidla a volba mezi tile-by-tile stavbou a blokovými stavebními díly.
+- Katalog primárních a sekundárních modulů.
+- Přesná pravidla detekce sekcí, hranic, dveří a Airtight.
+- Generování a persistence asteroidových encounterů.
+- Přesná pravidla generování galaxie, planet a počtu asteroidů.
+- Rozsah a pravidla vzácných modulů cizích lodí a stanic v encounterech.
+
+### 6.8 Navržené hlavní vývojové větve
+- `feature/core-architecture` — Game Core, společný stav, čas, události, persistence a integrační kontrakty.
+- `feature/colony-construction` — konstrukce Cassandry, sekce, primární/sekundární moduly a Airtight.
+- `feature/pawn-life` — Pawn data, anatomie, zdraví, potřeby, profese a autonomní život.
+- `feature/colony-automation` — jednoduchá automatizace běžného provozu kolonie.
+- `feature/environment-systems` — atmosféra, tlak, teplota, vakuum a environmentální hrozby.
+- `feature/ship-systems` — energie, výroba/spotřeba, pohon a funkční systémy lodi.
+- `feature/resources-industry` — materiály, suroviny, inventáře, skladování, zpracování a výroba.
+- `feature/expedition-gameplay` — real-time top-down expedice, protagonistovo ovládání a jednoduché příkazy družině.
+- `feature/combat-damage` — zbraně, zásahy, poškození, brnění a nepřátelé.
+- `feature/mining-exploration` — povrchová těžba, prospecting, průzkum asteroidů a encounter loot; bez podzemí a pater.
+- `feature/galaxy-world` — hierarchie a generování galaxie, soustav, planet a asteroidů.
+- `feature/navigation-vehicles` — skokové cestování Cassandry, lokální lety shuttle a docking.
+
+Větve jsou organizační hranice vývoje, nikoli příkaz k okamžité paralelní implementaci. Každá větev musí vycházet ze společného MAIN a respektovat veřejná rozhraní definovaná v architektuře. UI a Input zůstávají průřezové oblasti: společný základ patří do MAIN a konkrétní UI se vyvíjí se systémem, který obsluhuje.
