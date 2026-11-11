@@ -50,6 +50,9 @@ Nejdříve společně definovat odpovědnosti, datové modely, životní cyklus 
    - Registry před inicializací ověří unikátnost ID, dostupnost povinných závislostí, konflikty poskytovaných služeb a možnost sestavit platné pořadí inicializace.
    - Registrace a kontrola závislostí proběhnou jako oddělená fáze před spuštěním systémů. Neplatná konfigurace musí skončit srozumitelnou chybou ještě před částečným startem hry.
    - Přesný životní cyklus, pořadí hooků, pravidla volitelných závislostí, chování při selhání a možnost pozdní registrace zůstávají předmětem návrhu a schválení.
+   - **Schválený lifecycle kontrakt: varianta C.** Každý systém povinně poskytuje `initialize(context)`, `start()` a `destroy()`. Metody `pause()` a `resume()` jsou volitelné; Registry je volá pouze u systémů, které je implementují.
+   - Pozastavení systému je oddělené od jeho aktualizační frekvence a časového režimu. To se navrhne samostatně v bodě Game Clock.
+   - Pro první verzi se po dokončení inicializace zakazuje pozdní registrace a odebírání systémů za běhu.
    - Jak systém deklaruje své ID, závislosti a poskytované služby.
    - Jak se systémy registrují, inicializují, spouštějí, pozastavují, obnovují a ukončují.
    - Pořadí inicializace a bezpečné řešení chyb při startu.
