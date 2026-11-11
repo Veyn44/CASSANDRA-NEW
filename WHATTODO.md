@@ -47,6 +47,10 @@ Nejdříve společně definovat odpovědnosti, datové modely, životní cyklus 
 
 2. **System Registry a životní cyklus systémů**
    - **Schválený způsob registrace: varianta A – centrální Bootstrap.** Bootstrap explicitně sestaví seznam systémů a předá jej System Registry; systémy se samy neregistrují při importu a import modulů nesmí mít registrační vedlejší účinky.
+   - **Schválené pořadí: automatické odvození z deklarovaných závislostí.** Registry před inicializací sestaví závislostní graf z požadovaných a poskytovaných služeb a automaticky určí platné pořadí (topologické řazení); ruční globální pořadník systémů nebude potřeba.
+   - Pořadí je nutné dodržet už při `initialize()`, protože systémy smějí získávat připravené služby během své inicializace. Poskytovatel se proto inicializuje před konzumentem; po úspěšném `initialize()` zpřístupní svou službu.
+   - Fáze `start()` proběhne až po úspěšné inicializaci všech systémů a rovněž respektuje závislostní pořadí. `destroy()` probíhá v opačném pořadí, aby se nejprve ukončily konzumenti a až poté poskytovatelé jejich služeb.
+   - Pokud graf obsahuje cyklus, chybějící povinnou službu nebo nejednoznačného poskytovatele, Registry odmítne sestavu ještě před inicializací a oznámí konkrétní příčinu.
    - Registry před inicializací ověří unikátnost ID, dostupnost povinných závislostí, konflikty poskytovaných služeb a možnost sestavit platné pořadí inicializace.
    - Registrace a kontrola závislostí proběhnou jako oddělená fáze před spuštěním systémů. Neplatná konfigurace musí skončit srozumitelnou chybou ještě před částečným startem hry.
    - Přesný životní cyklus, pořadí hooků, pravidla volitelných závislostí, chování při selhání a možnost pozdní registrace zůstávají předmětem návrhu a schválení.
